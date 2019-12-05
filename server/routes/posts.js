@@ -31,11 +31,11 @@ router.get('/data', async (request, response) => {
 router.get('/', async (request, response) => {
     var arr = []
     if (Object.keys(request.query).length !== 0) {
-        if (request.query.q !== undefined) {
+        if (request.query.q != null) {
             arr = await searchFunc(request.query.q)
         }
         if (request.query.q === undefined) {
-            arr =await categoriesFunc(request.query)
+            arr = await categoriesFunc(request.query)
         }
     }
     arr = (arr.length === 0 ? 'no request data found' : arr)
@@ -61,11 +61,12 @@ async function categoriesFunc(name) {
 async function searchFunc(target) {
     // console.log('target', target) // {postCategories: '' }  {location: ''}name additionalInfo etc.
     let arr = (target ? [] : 'no data found')
-    await getAllData.then(DATA => {
+    let data = postsData.find()
+    await data.then(DATA => {
         if (target)
             DATA.map((post) => {
                 Object.values(post._doc).map((nested) => {
-                    if (typeof nested === 'string' && nested !== undefined && target !== undefined)
+                    if (typeof nested === 'string' && nested != null && target != null)
                         if (nested.toLowerCase().includes(target.toLowerCase())) {
                             // console.log(post._doc)
                             arr.push(post._doc)
@@ -85,53 +86,48 @@ async function searchFunc(target) {
 /*  params: {sellerID: ''} 
             {buyerOffers: ''}  */
 router.get('/getOffers', (async (request, response) => {
-    console.log(request.query.buyerOffers)
-    response.json(request.query.sellerID !== undefined ?
+    // console.log(request.query.buyerOffers)
+    response.json(request.query.sellerID != null ?
         await sellerOffers(request.query.sellerID) :
         await buyerOffers(request.query.buyerOffers)
     )
 })) /// asem@qaffaf.com
-const getAllData = new Promise((resolve, reject) => {
-    try {
-        resolve(postsData.find())
-    }
-    catch (err) {
-        reject({ message: err.message })
-    }
-
-})
 async function sellerOffers(sellerID) {
-    var arr = [] /// Asem or hello
-    await getAllData.then(DATA => {
+    let arr = [] /// Asem or hello
+    if (sellerID != null){
+    let data = postsData.find()
+    await data.then(DATA => {
         DATA.map((post) => {
-            if (sellerID !== undefined)
                 if (post._doc.sellerID === sellerID) {
                     Object.keys(post._doc).map(key => {
-                        if (post._doc[key].price !== undefined) {
-                            arr.push({ id: post._id })
+                        if (post._doc[key].price != null) {
                             arr.push(post._doc.imgUrl)
-                            arr.push({ [key]: post._doc[key].price })
+                            arr.push({ id: post._id , [key]: post._doc[key].price })
                         }
                     })
                 }
         })
-        arr = (arr.length === 0 ? 'no request data found' : arr)
+        arr = (arr.length === 0 ? [] : arr)
     })
         .catch(err => {
             return { message: err.message }
         })
+    }
     return arr
 }
 async function buyerOffers(buyerName) {
     let arr = [] //buyer889111
-    await getAllData.then((DATA) => {
+    let data = postsData.find()
+    await data.then((DATA) => {
         DATA.map(post => {
-            if (post._doc[buyerName] !== undefined) {
+            if (post._doc[buyerName] != null) {
+                // console.log(post._id)
+                // arr.push({id:post._doc._id,imgUrl:post._doc.imgUrl})
                 arr.push(post._doc.imgUrl)
                 arr.push(post._doc[buyerName])
             }
         })
-        arr = (arr.length === 0 ? 'no request data found' : arr)
+        arr = (arr.length === 0 ? [] : arr)
     })
         .catch(err => {
             return { message: err.message }
@@ -143,9 +139,9 @@ async function buyerOffers(buyerName) {
 
 /*<=========================== START.add new Posts API has been applied in following func.===========================>*/
 router.post('/postAdvertisement', async (request, response) => {
-    // console.log(request.body)
+    console.log(request.body)
     let { sellerID, postCategories, location, name, additionalInfo, imgUrl } = request.body
-    if (sellerID !== undefined && postCategories !== undefined && location !== undefined && name !== undefined && additionalInfo !== undefined && imgUrl !== undefined) {
+    if (sellerID != null && postCategories != null && location != null && name != null && additionalInfo != null && imgUrl != null) {
         try {
             await postsData.create(request.body, (err, doc) => {
                 if (err) {
@@ -162,12 +158,13 @@ router.post('/postAdvertisement', async (request, response) => {
 
 /*<=========================== END. add new Posts  func.===========================>*/
 /*<=========================== START.add new offer to particular post   func.===========================>*/
-router.patch('/postOffers', async (request, response) => {
+router.get('/postOffers', async (request, response) => {
+    console.log(request.query)
     let { id } = request.query
     let offerMaker = Object.keys(request.query)[1]
     let offerPrice = request.query[offerMaker]
     // console.log(offerPrice)
-    let newObj = { [offerMaker]: { price: offerPrice, date: Date(Date.now()) } }
+    let newObj = { [offerMaker]: { price: offerPrice, date: Date(Date.now()), status: "pending" , id  } }
     try {
         await postsData.findByIdAndUpdate(id, newObj, (err, doc) => {
             if (err) { response.status(400).json({ message: err.message }) }
@@ -182,62 +179,41 @@ router.patch('/postOffers', async (request, response) => {
 })
 /*<=========================== END. add new Posts  func.===========================>*/
 /*<=========================== START. DELETE a Post  func.===========================>*/
+let IdsForDeleteArray = []
 router.delete('/:id', async (request, response) => {
+    let test = request.params.id
+    IdsForDeleteArray.push(test)
+    if (IdsForDeleteArray.length !== 0) {
+        DeleteTimer
+    }
+    response.json("it will have been deleted at 12 AM")
+})
+const DeleteAtSpecificTime = async (id) => {
+    let output = null
     try {
-        await postsData.findByIdAndDelete(request.params.id, (err, doc) => {
-            if (err) { response.status(404).json({ message: err.message }) }
-            else { response.status(202).json({ deletion: doc }) }
+        await postsData.findByIdAndDelete(id, (err, doc) => {
+            if (err) { output = { message: err.message } }
+            else { 
+                output = { deletion: doc } 
+                IdsForDeleteArray.shift()
+             }
         })
     }
     catch (error) {
-        response.status(500).json({ message: error.message })
+        output = { message: error.message }
     }
-})
+    return output
+}
+const DeleteTimer = setInterval( () => {
+    var date = new Date();
+    if (date.getHours() === 0 && date.getMinutes() === 34) {
+        IdsForDeleteArray.forEach(async id=>{
+            await  DeleteAtSpecificTime(id)
+        console.log("deleted items",await DeleteAtSpecificTime())
+        })
+    }
+}, 10000)
 
 /*<=========================== END. DELETE a Post  func.===========================>*/
 
-// router.post('/upload', (req, res) => {
-//     console.log('wait for the whole post to be submitted ...')
-//     console.log(req.body)
-// })
-
-// data = {
-//     sellerID: "Asem",
-//     postCategories: "car",
-//     location: 'Amman',
-//     name: "BMW",
-//     additionalInfo: '520i',
-//     imgUrl: 'https://images.summitmedia-digital.com/topgear/images/2018/07/31/BMW-520d1.jpg',
-//     buyerOne: {
-//         price: '20k',
-//         date: Date(Date.now())
-//     },
-//     buyerTwo: {
-//         price: '18k',
-//         date: Date(Date.now())
-//     },
-//     buyerThree: {
-//         price: '21k',
-//         date: Date(Date.now())
-//     },
-//     buyerFour: {
-//         price: '15k',
-//         date: Date(Date.now())
-//     }
-// }
-
-// router.get('/ASEM', async (request, response) => {
-//     // let test = await postsData.find()
-//     try {
-//         await postsData.create(data, (err, doc) => {
-//             if (err) {
-//                 response.status(400).json({ message: err })
-//             } else
-//                 response.status(201).json(doc)
-//         })
-//     }
-//     catch (err) {
-//         response.status(500).json(err)
-//     }
-// })
 module.exports = router

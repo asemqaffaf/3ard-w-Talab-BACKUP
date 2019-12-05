@@ -18,5 +18,5 @@ const userRouter = require('./routes/users')
 app.use(process.env.USER_ROUTE_URL, userRouter)     //      /users/API/
 const postRouter = require('./routes/posts')
 app.use(process.env.POST_ROUTE_URL, postRouter)     //      /posts/API/
-// const uploadRouter = require('./routes/upload.js')  //      /upload/
-// app.use('/upload',uploadRouter)
+const uploadRouter = require('./routes/upload.js')  //      /upload/
+app.use('/upload',uploadRouter)

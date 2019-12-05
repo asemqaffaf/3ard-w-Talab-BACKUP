@@ -6,6 +6,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  ScrollView,
   AsyncStorage
 } from "react-native";
 export default class Profile extends Component {
@@ -15,7 +16,7 @@ export default class Profile extends Component {
   };
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.header}></View>
         <Image
           style={styles.avatar}
@@ -37,7 +38,7 @@ export default class Profile extends Component {
             <Text>log Out</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }

@@ -122,24 +122,29 @@ export default class FirebaseStorageUploader extends Component {
     }
   };
 
-  isVisible = condition => {
+  isVisible = (condition) => {
     this.setState({ isVisible: condition });
+    this.props.navigation.navigate("landingStack");
   };
 
   render() {
     return (
-      <View>
-        <Button
-          style={[styles.button]}
-          onPress={this.handleChoose}
-          title="Choose"
-        />
+      <View style={styles.container}>
+        <View>
+          <Button
+            style={styles.button}
+            onPress={this.handleChoose}
+            title="Choose"
+          />
+        </View>
 
-        <Button
-          style={[styles.button]}
-          onPress={this.handleTake}
-          title="Take"
-        />
+        <View>
+          <Button
+            style={styles.button}
+            onPress={this.handleTake}
+            title="Take"
+          />
+        </View>
 
         <Modal isVisible={this.state.isVisible}>
           <AddPost isVisible={this.isVisible} imgUrl={this.state.url} />
@@ -150,11 +155,13 @@ export default class FirebaseStorageUploader extends Component {
 }
 
 const styles = StyleSheet.create({
-  button: {
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#333",
-    textAlign: "center",
-    maxWidth: 150
-  }
+  container: {
+    flex: 1
+  },
+
+  buttonTake: {
+    alignSelf: "baseline"
+  },
+
+  buttonChoose: {}
 });

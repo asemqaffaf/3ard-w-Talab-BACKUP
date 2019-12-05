@@ -25,7 +25,7 @@ export default class LoginScreen extends Component {
       this.setState({
         isLoggedIn: true
       });
-      this.props.navigation.navigate("tabNavigator");
+      // this.props.navigation.navigate("tabNavigator");
     } else {
       this.setState({
         isLoggedIn: false
@@ -66,13 +66,13 @@ export default class LoginScreen extends Component {
           isLoggedIn: true,
           getId: await AsyncStorage.getItem("userId")
         });
-        this.props.navigation.navigate("tabNavigator")
+        this.props.navigation.navigate("tabNavigator");
       })
       .catch(err => {
         this.setState({
           isLoggedIn: false
         });
-        alert('please check your email or password')
+        alert("please check your email or password");
       });
   };
 

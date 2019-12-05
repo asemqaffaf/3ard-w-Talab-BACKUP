@@ -11,6 +11,7 @@ import Home from "./Screens/HomeScreen";
 import Offers from "./Screens/OffersScreen";
 import CameraScreen from "./Screens/CameraScreen";
 import LoginScreen from "./Screens/LoginScreen";
+import LandingScreen from "./Screens/LandingScreen";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const HomeStack = createStackNavigator({
@@ -28,8 +29,8 @@ const CameraStack = createStackNavigator({
 });
 CameraStack.navigationOptions = {
   tabBarLabel: "Camera",
-  tabBarIcon: porp => (
-    <MaterialCommunityIcons color={porp.tintColor} name="camera" size={32} />
+  tabBarIcon: prop => (
+    <MaterialCommunityIcons color={prop.tintColor} name="camera" size={32} />
   )
 };
 const ProfileStack = createStackNavigator({
@@ -64,6 +65,10 @@ const loginStack = createStackNavigator({
   LoginScreen
 });
 
+const landingStack = createStackNavigator({
+  LandingScreen
+});
+
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   CameraStack,
@@ -71,22 +76,11 @@ const tabNavigator = createBottomTabNavigator({
   ProfileStack
 });
 
-let user = null
-const getter = async () => {
-  user = await AsyncStorage.getItem("userId");
-};
-getter()
+let mainNavigator = createSwitchNavigator({
+  landingStack,
+  loginStack,
+  tabNavigator
+});
 
-let mainNavigator = createSwitchNavigator(
-  user != null
-    ? {
-        tabNavigator,
-        loginStack
-      }
-    : {
-        loginStack,
-        tabNavigator
-      }
-);
 const container = createAppContainer(mainNavigator);
 export default container;

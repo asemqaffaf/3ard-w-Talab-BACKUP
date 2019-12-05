@@ -9,14 +9,14 @@ import {
 } from "react-native";
 import axios from "axios";
 import Modal from "react-native-modal";
-import PostScreen from './PostScreen'
+import PostScreen from "./PostScreen";
 
 export default class Home extends Component {
   state = {
     posts: [],
     post: null,
     isVisible: false,
-    width: Math.floor(Dimensions.get("window").width / 3),
+    width: Math.floor(Dimensions.get("window").width / 3)-2,
     refreshing: false
   };
 
@@ -53,7 +53,7 @@ export default class Home extends Component {
               <TouchableOpacity onPress={() => this.isVisible(true, post.item)}>
                 <Image
                   source={{ uri: post.item.imgUrl }}
-                  style={{ width, height: width }}
+                  style={{ width, height: width, margin: 1 }}
                 />
               </TouchableOpacity>
             );
@@ -62,7 +62,11 @@ export default class Home extends Component {
           onRefresh={this.getPosts}
         />
         <Modal isVisible={this.state.isVisible}>
-          <PostScreen isVisible={this.isVisible} post={this.state.post} />
+          <PostScreen
+            isVisible={this.isVisible}
+            post={this.state.post}
+            getPosts={this.getPosts}
+          />
         </Modal>
       </View>
     );

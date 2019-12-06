@@ -94,24 +94,23 @@ router.get('/getOffers', (async (request, response) => {
 })) /// asem@qaffaf.com
 async function sellerOffers(sellerID) {
     let arr = [] /// Asem or hello
-    if (sellerID != null){
-    let data = postsData.find()
-    await data.then(DATA => {
-        DATA.map((post) => {
+    if (sellerID != null) {
+        let data = postsData.find()
+        await data.then(DATA => {
+            DATA.map((post) => {
                 if (post._doc.sellerID === sellerID) {
                     Object.keys(post._doc).map(key => {
                         if (post._doc[key].price != null) {
-                            arr.push(post._doc.imgUrl)
-                            arr.push({ id: post._id , [key]: post._doc[key].price })
+                            arr.push({ imgUrl: post._doc.imgUrl, price: post._doc[key].price, name: post._doc.name, postCategories: post._doc.postCategories, location: post._doc.location, key, offerMaker: key, postId: post._doc[key].id })
                         }
                     })
                 }
+            })
+            arr = (arr.length === 0 ? [] : arr)
         })
-        arr = (arr.length === 0 ? [] : arr)
-    })
-        .catch(err => {
-            return { message: err.message }
-        })
+            .catch(err => {
+                return { message: err.message }
+            })
     }
     return arr
 }
@@ -139,7 +138,7 @@ async function buyerOffers(buyerName) {
 
 /*<=========================== START.add new Posts API has been applied in following func.===========================>*/
 router.post('/postAdvertisement', async (request, response) => {
-    console.log(request.body)
+    // console.log(request.body)
     let { sellerID, postCategories, location, name, additionalInfo, imgUrl } = request.body
     if (sellerID != null && postCategories != null && location != null && name != null && additionalInfo != null && imgUrl != null) {
         try {
@@ -159,12 +158,12 @@ router.post('/postAdvertisement', async (request, response) => {
 /*<=========================== END. add new Posts  func.===========================>*/
 /*<=========================== START.add new offer to particular post   func.===========================>*/
 router.get('/postOffers', async (request, response) => {
-    console.log(request.query)
+    // console.log(request.query)
     let { id } = request.query
     let offerMaker = Object.keys(request.query)[1]
     let offerPrice = request.query[offerMaker]
     // console.log(offerPrice)
-    let newObj = { [offerMaker]: { price: offerPrice, date: Date(Date.now()), status: "pending" , id  } }
+    let newObj = { [offerMaker]: { price: offerPrice, date: Date(Date.now()), status: "pending", id } }
     try {
         await postsData.findByIdAndUpdate(id, newObj, (err, doc) => {
             if (err) { response.status(400).json({ message: err.message }) }
@@ -180,9 +179,10 @@ router.get('/postOffers', async (request, response) => {
 /*<=========================== END. add new Posts  func.===========================>*/
 /*<=========================== START. DELETE a Post  func.===========================>*/
 let IdsForDeleteArray = []
-router.delete('/:id', async (request, response) => {
-    let test = request.params.id
-    IdsForDeleteArray.push(test)
+router.delete('/deleteAtSpecificTime/:id', async (request, response) => {
+    let ids = request.params.id
+    IdsForDeleteArray.push(ids)
+    // console.log(IdsForDeleteArray)
     if (IdsForDeleteArray.length !== 0) {
         DeleteTimer
     }
@@ -193,10 +193,10 @@ const DeleteAtSpecificTime = async (id) => {
     try {
         await postsData.findByIdAndDelete(id, (err, doc) => {
             if (err) { output = { message: err.message } }
-            else { 
-                output = { deletion: doc } 
+            else {
+                output = { deletion: doc }
                 IdsForDeleteArray.shift()
-             }
+            }
         })
     }
     catch (error) {
@@ -204,16 +204,43 @@ const DeleteAtSpecificTime = async (id) => {
     }
     return output
 }
-const DeleteTimer = setInterval( () => {
+const DeleteTimer = setInterval(() => {
     var date = new Date();
-    if (date.getHours() === 0 && date.getMinutes() === 34) {
-        IdsForDeleteArray.forEach(async id=>{
-            await  DeleteAtSpecificTime(id)
-        console.log("deleted items",await DeleteAtSpecificTime())
+    if (date.getHours() === 0 && date.getMinutes() === 0) {
+        IdsForDeleteArray.forEach(async id => {
+            await DeleteAtSpecificTime(id)
+            console.log("deleted items", await DeleteAtSpecificTime())
         })
     }
-}, 10000)
+}, 20000)
+router.put('/acceptOffer/', async (request, response) => {
+    console.log(request.body)
+    // instead of my name is Adam2  you have to pass another object with key phone number and value of it
+    let newObj = { [request.body.offerMaker]: { price: "My name is Adam2", date: Date(Date.now()), status: "Accepted", id: request.body.postId } }
+    try {
+        await postsData.findByIdAndUpdate(request.body.postId, newObj, (err, doc) => {
+            if (err) { response.status(400).json({ message: err.message }) }
+            else response.status(201).json(doc)
 
+        })
+    }
+    catch (err) {
+        response.status(500).json({ message: err.message })
+    }
+})
+router.put('/deleteOffer/', async (request, response) => {
+    let { offerMaker, postId } = request.body
+    // console.log(request.body)
+    let data = await postsData.findById(postId)
+    let deleteOffer = { [offerMaker]: data._doc[offerMaker] }
+    try {
+        let data2 = await postsData.update({ "_id": postId }, { $unset: deleteOffer })
+        response.status(201).json(data2['ok'])
+    }
+    catch{
+        response.status(500).json({ message: err.message })
+    }
+})
 /*<=========================== END. DELETE a Post  func.===========================>*/
 
 module.exports = router

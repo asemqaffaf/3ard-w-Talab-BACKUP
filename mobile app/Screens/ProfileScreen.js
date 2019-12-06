@@ -10,6 +10,16 @@ import {
   AsyncStorage
 } from "react-native";
 export default class Profile extends Component {
+  state={
+    userId : null
+  }
+  componentDidMount(){
+    this.getUserID()
+  }
+  getUserID= async()=>{
+    let userId = await AsyncStorage.getItem("userId")
+    this.setState({userId})
+  }
   logOut = async () => {
     await AsyncStorage.removeItem("userId");
     this.props.navigation.navigate("loginStack");
@@ -24,7 +34,7 @@ export default class Profile extends Component {
         />
 
         <View style={styles.bodyContent}>
-          <Text style={styles.name}>Aseeeeeeeeem</Text>
+          <Text style={styles.name}>{this.state.userId}</Text>
 
           <Text style={styles.info}> Web designer / Mobile developer</Text>
           <Text style={styles.description}>

@@ -5,7 +5,8 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  AsyncStorage
 } from "react-native";
 import axios from "axios";
 import Modal from "react-native-modal";
@@ -17,14 +18,18 @@ export default class Home extends Component {
     post: null,
     isVisible: false,
     width: Math.floor(Dimensions.get("window").width / 3)-2,
-    refreshing: false
+    refreshing: false,
+    userId : null
   };
 
   componentDidMount() {
+    
     this.getPosts();
   }
 
-  getPosts = () => {
+  getPosts =async () => {
+    let userId = await AsyncStorage.getItem('userId')
+    this.setState({userId})
     axios
       .get("https://ardwtalabapp.herokuapp.com/posts/API/data")
       .then(res => {
@@ -41,7 +46,7 @@ export default class Home extends Component {
   };
 
   render() {
-    let { width, posts, refreshing } = this.state;
+    let { width, posts, refreshing  } = this.state;
     return (
       <View style={styles.container}>
         <FlatList
@@ -66,6 +71,7 @@ export default class Home extends Component {
             isVisible={this.isVisible}
             post={this.state.post}
             getPosts={this.getPosts}
+            userId = {this.state.userId}
           />
         </Modal>
       </View>

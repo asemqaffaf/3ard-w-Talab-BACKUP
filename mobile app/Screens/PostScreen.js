@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  AsyncStorage,
   Image,
   Dimensions
 } from "react-native";
@@ -16,44 +15,44 @@ export default class AddPost extends Component {
   state = {
     width: Dimensions.get("window").width,
     offer: null,
-    pendingOffer: null,
-    showOffer: false
+    pendingOffer: "", // please keep it as ""
+    showOffer: false,
+    userId: this.props.userId != null ? this.props.userId : null,
+    ownerSellerId: this.props.post["sellerID"] != null ? this.props.post["sellerID"] : null
   };
 
-  componentDidMount(){
+  componentDidMount() {
     this.getOffer()
   }
 
-  getOffer = async () => {
-    let userId = await AsyncStorage.getItem('userId') 
-    let offer = Object.keys(this.props.post).filter(offer => offer === userId)
-    if(offer[0]){
-      this.setState({offer:this.props.post[offer[0]].price, showOffer: true})
+  getOffer = () => {
+    let userId = this.state.userId
+    if (this.props.post[userId] != null) {
+      this.setState({ offer: this.props.post[userId].price, showOffer: true })
     }
   }
-
   makeOffer = pendingOffer => {
     this.setState({ pendingOffer });
   };
-
-  submitOffer = async () => {
+  submitOffer = () => {
     this.textInput.clear()
-    let buyerId = await AsyncStorage.getItem("userId");
+    let buyerId = this.props.userId;
     let id = this.props.post._id;
-    let offer  = this.state.pendingOffer;
-
-    axios
-      .get("https://ardwtalabapp.herokuapp.com/posts/API/postOffers", {
+    let offer = this.state.pendingOffer;
+    if (this.state.pendingOffer != "")
+      axios.get("https://ardwtalabapp.herokuapp.com/posts/API/postOffers", {
         params: {
           id,
           [buyerId]: offer
         }
       })
-      .then(res => {
-        this.setState({offer, showOffer: true})
-        this.props.getPosts()
-      })
-      .catch(err => console.log(err));
+        .then(res => {
+          this.setState({ offer, showOffer: true })
+          this.props.getPosts()
+          // this.props.isVisible(false)
+        })
+        .catch(err => console.log(err));
+
   };
 
   render() {
@@ -64,8 +63,9 @@ export default class AddPost extends Component {
       postCategories,
       location,
       additionalInfo,
-      imgUrl
+      imgUrl,
     } = this.props.post;
+    let { userId, ownerSellerId } = this.state
     return (
       <ScrollView>
         <View style={styles.container}>
@@ -97,40 +97,41 @@ export default class AddPost extends Component {
                 {location}
               </Text>
             </View>
-            <View
-              style={{
-                flex: 1,
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              {showOffer === false ? null : (
-                <Text style={styles.textWrapper}>
-                  <Text style={styles.text}>You have made an offer for </Text>
-                  {offer} JOD
-                </Text>
-              )}
-              <TextInput
-                style={styles.input}
-                placeholder="Make an Offer"
-                blurOnSubmit
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="number-pad"
-                onChangeText={offer => this.makeOffer(offer)}
-                ref={input => (this.textInput = input)}
-              ></TextInput>
-
-              <TouchableOpacity
-                style={styles.buttonContainer}
-                onPress={this.submitOffer}
+            {userId !== ownerSellerId ?
+              <View
+                style={{
+                  flex: 1,
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
               >
-                <Text style={{ color: "white", fontWeight: "bold" }}>
-                  Make Offer!
+                {showOffer === false ? null : (
+                  <Text style={styles.textWrapper}>
+                    <Text style={styles.text}>You have made an offer for </Text>
+                    {offer} JOD
                 </Text>
-              </TouchableOpacity>
-            </View>
+                )}
+                <TextInput
+                  style={styles.input}
+                  placeholder="Make an Offer"
+                  blurOnSubmit
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="number-pad"
+                  onChangeText={offer => this.makeOffer(offer)}
+                  ref={input => (this.textInput = input)}
+                ></TextInput>
+
+                <TouchableOpacity
+                  style={styles.buttonContainer}
+                  onPress={this.submitOffer}
+                >
+                  <Text style={{ color: "white", fontWeight: "bold" }}>
+                    Make Offer!
+                </Text>
+                </TouchableOpacity>
+              </View> : <Text style={{ color: 'red' }}>You've made this post!</Text>}
           </View>
         </View>
       </ScrollView>

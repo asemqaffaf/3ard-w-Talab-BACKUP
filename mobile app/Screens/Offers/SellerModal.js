@@ -3,7 +3,6 @@ import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput 
 import { vw, vh } from 'react-native-expo-viewport-units';
 
 export default class SellerModal extends Component {
-
   render() {
 
     return (

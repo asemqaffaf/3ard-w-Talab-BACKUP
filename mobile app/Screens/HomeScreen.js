@@ -23,7 +23,7 @@ export default class Home extends Component {
   };
 
   componentDidMount() {
-    
+
     this.getPosts();
   }
 
@@ -80,7 +80,7 @@ export default class Home extends Component {
 }
 
 Home.navigationOptions = {
-  title: "Home"
+  title: "3ard w Talab"
 };
 
 const styles = StyleSheet.create({

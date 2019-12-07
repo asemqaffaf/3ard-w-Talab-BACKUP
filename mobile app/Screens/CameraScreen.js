@@ -1,10 +1,13 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { storage } from "../config/firebaseConfig";
 import Modal from "react-native-modal";
 import AddPost from "./AddPostScreen";
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
 export default class FirebaseStorageUploader extends Component {
   state = {
     url: null,
@@ -105,7 +108,7 @@ export default class FirebaseStorageUploader extends Component {
       })
         .then(result => {
           if (!result.cancelled) {
-            const { height, width, type, uri } = result;
+            const { uri } = result;
             return this.uriToBlob(uri);
           }
         })
@@ -122,28 +125,39 @@ export default class FirebaseStorageUploader extends Component {
     }
   };
 
-  isVisible = (condition) => {
-    this.setState({ isVisible: condition });
+  isVisible = condition => {
+    this.setState({ isVisible: condition, progress: 0 });
     this.props.navigation.navigate("landingStack");
   };
 
   render() {
+    if (this.state.progress > 0)
+      return (
+        <View style={styles.activity}>
+          <ActivityIndicator size={75} color="#2196f3" />
+          <Text>Uploading...</Text>
+        </View>
+      );
     return (
       <View style={styles.container}>
-        <View>
-          <Button
-            style={styles.button}
-            onPress={this.handleChoose}
-            title="Choose"
-          />
+        <View style={styles.msgContainer}>
+          <Text style={styles.msg}>choose a photo from gallery</Text>
+          <Text style={styles.msg}>or</Text>
+          <Text style={styles.msg}>shoot it</Text>
         </View>
 
-        <View>
-          <Button
-            style={styles.button}
-            onPress={this.handleTake}
-            title="Take"
-          />
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity onPress={this.handleChoose}>
+            <View style={{ ...styles.button, ...styles.choose }}>
+              <Ionicons name="ios-photos" color="white" size={33} />
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={this.handleTake}>
+            <View style={styles.button}>
+              <Ionicons name="ios-camera" color="white" size={35} />
+            </View>
+          </TouchableOpacity>
         </View>
 
         <Modal isVisible={this.state.isVisible}>
@@ -155,13 +169,49 @@ export default class FirebaseStorageUploader extends Component {
 }
 
 const styles = StyleSheet.create({
+  activity: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
   container: {
-    flex: 1
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center"
   },
 
-  buttonTake: {
-    alignSelf: "baseline"
+  msgContainer: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center"
   },
 
-  buttonChoose: {}
+  buttonsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-end"
+  },
+
+  msg: {
+    fontSize: 18,
+    fontWeight: "bold",
+    margin: 10
+  },
+
+  button: {
+    backgroundColor: "#2196f3",
+    paddingVertical: 12,
+    paddingHorizontal: 17,
+    borderRadius: 100,
+    margin: 20,
+    marginBottom: 50
+  },
+
+  choose: {
+    paddingHorizontal: 15
+  }
 });

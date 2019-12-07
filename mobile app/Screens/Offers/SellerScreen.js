@@ -1,10 +1,16 @@
-import React, { Component } from 'react'
-import { View, Text, Image, ScrollView, TouchableOpacity, AsyncStorage } from 'react-native'
-import axios from 'axios'
-import { vw, vh } from 'react-native-expo-viewport-units';
-import Modal from 'react-native-modal'
-import SellerModal from './SellerModal'
-
+import React, { Component } from "react";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  AsyncStorage
+} from "react-native";
+import axios from "axios";
+import { vw, vh } from "react-native-expo-viewport-units";
+import Modal from "react-native-modal";
+import SellerModal from "./SellerModal";
 
 export default class SellerScreen extends Component {
   state = {
@@ -13,19 +19,20 @@ export default class SellerScreen extends Component {
     isVisible: false
   }
   componentDidMount = () => {
-    this.fetchSellerOffers()
-  }
+    this.fetchSellerOffers();
+  };
   fetchSellerOffers = async () => {
-    axios.get('https://ardwtalabapp.herokuapp.com/posts/API/getOffers', {
-      params: {
-        sellerID: await AsyncStorage.getItem('userId')
-        // sellerID: '5dd03149694cc74c0fbe210c' // ahmad@gmail.com
-      }
-    })
+    axios
+      .get("https://ardwtalabapp.herokuapp.com/posts/API/getOffers", {
+        params: {
+          sellerID: await AsyncStorage.getItem("userId")
+          // sellerID: '5dd03149694cc74c0fbe210c' // ahmad@gmail.com
+        }
+      })
       .then(res => {
         this.setState({
           offers: res.data
-        })
+        });
       })
       .catch(err => console.log(err))
   }
@@ -104,7 +111,7 @@ export default class SellerScreen extends Component {
           </View>
         </ScrollView>
       </>
-    )
+    );
   }
 }
 

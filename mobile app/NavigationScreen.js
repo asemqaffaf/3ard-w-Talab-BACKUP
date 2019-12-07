@@ -5,7 +5,6 @@ import {
   createAppContainer,
   createSwitchNavigator
 } from "react-navigation";
-import { AsyncStorage } from "react-native";
 import Profile from "./Screens/ProfileScreen";
 import Home from "./Screens/HomeScreen";
 import Offers from "./Screens/OffersScreen";
@@ -21,7 +20,7 @@ const HomeStack = createStackNavigator({
 HomeStack.navigationOptions = {
   tabBarLabel: "Home",
   tabBarIcon: ({ tintColor }) => (
-    <MaterialCommunityIcons color={tintColor} name="home-outline" size={32} />
+    <MaterialCommunityIcons color={tintColor} name="home-outline" size={35} />
   )
 };
 const CameraStack = createStackNavigator({
@@ -30,7 +29,7 @@ const CameraStack = createStackNavigator({
 CameraStack.navigationOptions = {
   tabBarLabel: "Camera",
   tabBarIcon: prop => (
-    <MaterialCommunityIcons color={prop.tintColor} name="camera" size={32} />
+    <MaterialCommunityIcons color={prop.tintColor} name="camera" size={35} />
   )
 };
 const ProfileStack = createStackNavigator({
@@ -42,7 +41,7 @@ ProfileStack.navigationOptions = {
     <MaterialCommunityIcons
       name="account"
       color={prop.tintColor}
-      size={32}
+      size={35}
     ></MaterialCommunityIcons>
   )
 };
@@ -51,12 +50,12 @@ const OfferStack = createStackNavigator({
 });
 
 OfferStack.navigationOptions = {
-  tabBarLabel: "Offer",
+  tabBarLabel: "Offers",
   tabBarIcon: prop => (
     <MaterialCommunityIcons
       name="tag"
       color={prop.tintColor}
-      size={32}
+      size={35}
     ></MaterialCommunityIcons>
   )
 };

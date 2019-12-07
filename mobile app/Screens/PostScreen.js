@@ -18,41 +18,42 @@ export default class AddPost extends Component {
     pendingOffer: "", // please keep it as ""
     showOffer: false,
     userId: this.props.userId != null ? this.props.userId : null,
-    ownerSellerId: this.props.post["sellerID"] != null ? this.props.post["sellerID"] : null
+    ownerSellerId:
+      this.props.post["sellerID"] != null ? this.props.post["sellerID"] : null
   };
 
   componentDidMount() {
-    this.getOffer()
+    this.getOffer();
   }
 
   getOffer = () => {
-    let userId = this.state.userId
+    let userId = this.state.userId;
     if (this.props.post[userId] != null) {
-      this.setState({ offer: this.props.post[userId].price, showOffer: true })
+      this.setState({ offer: this.props.post[userId].price, showOffer: true });
     }
-  }
+  };
   makeOffer = pendingOffer => {
     this.setState({ pendingOffer });
   };
   submitOffer = () => {
-    this.textInput.clear()
+    this.textInput.clear();
     let buyerId = this.props.userId;
     let id = this.props.post._id;
     let offer = this.state.pendingOffer;
     if (this.state.pendingOffer != "")
-      axios.get("https://ardwtalabapp.herokuapp.com/posts/API/postOffers", {
-        params: {
-          id,
-          [buyerId]: offer
-        }
-      })
+      axios
+        .get("https://ardwtalabapp.herokuapp.com/posts/API/postOffers", {
+          params: {
+            id,
+            [buyerId]: offer
+          }
+        })
         .then(res => {
-          this.setState({ offer, showOffer: true })
-          this.props.getPosts()
+          this.setState({ offer, showOffer: true });
+          this.props.getPosts();
           // this.props.isVisible(false)
         })
         .catch(err => console.log(err));
-
   };
 
   render() {
@@ -63,9 +64,9 @@ export default class AddPost extends Component {
       postCategories,
       location,
       additionalInfo,
-      imgUrl,
+      imgUrl
     } = this.props.post;
-    let { userId, ownerSellerId } = this.state
+    let { userId, ownerSellerId } = this.state;
     return (
       <ScrollView>
         <View style={styles.container}>
@@ -97,7 +98,7 @@ export default class AddPost extends Component {
                 {location}
               </Text>
             </View>
-            {userId !== ownerSellerId ?
+            {userId !== ownerSellerId ? (
               <View
                 style={{
                   flex: 1,
@@ -107,14 +108,14 @@ export default class AddPost extends Component {
                 }}
               >
                 {showOffer === false ? null : (
-                  <Text style={styles.textWrapper}>
+                  <View style={styles.textWrapper}>
                     <Text style={styles.text}>You have made an offer for </Text>
-                    {offer} JOD
-                </Text>
+                    <Text>{offer} JOD</Text>
+                  </View>
                 )}
                 <TextInput
                   style={styles.input}
-                  placeholder="Make an Offer"
+                  placeholder="  Make an Offer"
                   blurOnSubmit
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -129,9 +130,12 @@ export default class AddPost extends Component {
                 >
                   <Text style={{ color: "white", fontWeight: "bold" }}>
                     Make Offer!
-                </Text>
+                  </Text>
                 </TouchableOpacity>
-              </View> : <Text style={{ color: 'red' }}>You've made this post!</Text>}
+              </View>
+            ) : (
+              <Text style={{ color: "red" }}>You've made this post!</Text>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -171,7 +175,7 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     width: "90%",
     height: 50,
-    borderRadius: 2,
+    borderRadius: 15,
     marginTop: 5
   },
 
@@ -193,6 +197,8 @@ const styles = StyleSheet.create({
   },
 
   textWrapper: {
+    justifyContent: "center",
+    alignItems: 'center',
     marginBottom: 15
   },
 

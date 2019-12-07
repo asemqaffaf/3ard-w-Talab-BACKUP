@@ -1,9 +1,16 @@
-import React, { Component } from 'react'
-import {Text,View  , StyleSheet, ScrollView,TouchableOpacity,Image, TextInput} from 'react-native'
-import { vw, vh } from 'react-native-expo-viewport-units';
+import React, { Component } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  TextInput
+} from "react-native";
+import { vw, vh } from "react-native-expo-viewport-units";
 
 export default class BuyerModal extends Component {
-
   render() {
     let dateFormat = this.props.post.date.split(" ")
 return (
@@ -125,7 +132,6 @@ marginTop: 10
 
 // <TouchableOpacity style={{backgroundColor:'red', width: vw(20) , margin:vh(1)}} onPress={()=>this.props.operationHandler('denied', this.props.post)}>
 // <TouchableOpacity style={{backgroundColor:'green', width: vw(20)}} onPress={()=>this.props.operationHandler('accept', this.props.post) }>
-
 
 // <Text style={styles.textWrapper}>
 // <Text style={styles.text}>Post Name: </Text>

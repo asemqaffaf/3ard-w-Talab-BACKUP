@@ -23,11 +23,12 @@ export default class BuyerScreen extends Component {
     this.fetchBuyerSellerOffers();
   };
   fetchBuyerSellerOffers = async () => {
-    axios.get('http://localhost:5000/posts/API/getOffers', {
-      params: {
-        buyerOffers: await AsyncStorage.getItem("userId")
-      }
-    })
+    axios
+      .get("https://ardwtalabapp.herokuapp.com/posts/API/getOffers", {
+        params: {
+          buyerOffers: await AsyncStorage.getItem("userId")
+        }
+      })
       .then(res => {
         this.setState({ offers: res.data });
       })
@@ -69,60 +70,78 @@ export default class BuyerScreen extends Component {
                 alignItems: "flex-start"
               }}
             >
-              {this.state.offers != null ? this.state.offers.map((item, index) => {
-                let formatDate = item.date;
-                formatDate = formatDate.split(" ");
-                return (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      this.postHandler(item, true);
-                    }}>
-                    <View style={{flexDirection:'row', flexWrap : 'wrap'}}>
-
-                    <Image
-                      source={{ uri: item.imgUrl }}
-                      style={{
-                        width: vw(20),
-                        height: vh(9),
-                        borderRadius: 8
-                      }} />
-                    <View
-                      style={{
-                        margin: vw(0.5),
-                        width: vw(72),
-                        borderRadius: 10,
-                        backgroundColor: "#2096F3",
-                        fontWeight: "400",
-                        padding: 10
-                      }}>
-                      <Text>
-                        {formatDate[1] +
-                          " " +
-                          formatDate[2] +
-                          " " +
-                          formatDate[3]}
-                      </Text>
-                      <Text style={{ fontSize: 20, color: "white" }}>
-                        {`You've sent an offer for ${item.price} JOD`}
-                      </Text>
-                      {Array.isArray(item.status) ? (
-                        <Text
-                          style={{ fontSize: 15, color: "#90ee90" }}
-                        >{`${formatDate[4]}  ${item.status[0]}  ...`}</Text>
-                      ) : (
-                          <Text
-                            style={{ fontSize: 15, color: 'lightgray' }}
-                          >{`${formatDate[4]}`} <Text style={{color: item.status === 'Rejected' ? 'tomato': "lightgray"}}>{`  ${item.status}...`}</Text></Text>
-                        )}
-                    </View>
-                    </View>
-
-                  </TouchableOpacity>
-
-                )
-
-              })
+              {this.state.offers != null
+                ? this.state.offers.map((item, index) => {
+                    let formatDate = item.date;
+                    formatDate = formatDate.split(" ");
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => {
+                          this.postHandler(item, true);
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            flexWrap: "wrap",
+                            alignItems: "flex-start",
+                            height: vh(10),
+                            marginTop: vh(2)
+                          }}
+                        >
+                          <Image
+                            source={{ uri: item.imgUrl }}
+                            style={{
+                              width: vw(20),
+                              height: vh(9),
+                              borderRadius: 8,
+                              margin: vw(1)
+                            }}
+                          />
+                          <View
+                            style={{
+                              width: vw(70),
+                              borderRadius: 10,
+                              backgroundColor: "#2096F3",
+                              fontWeight: "400",
+                              padding: 10
+                            }}
+                          >
+                            <Text>
+                              {formatDate[1] +
+                                " " +
+                                formatDate[2] +
+                                " " +
+                                formatDate[3]}
+                            </Text>
+                            <Text style={{ fontSize: 20, color: "white" }}>
+                              {`You've sent an offer for ${item.price} JOD`}
+                            </Text>
+                            {Array.isArray(item.status) ? (
+                              <Text
+                                style={{ fontSize: 15, color: "#90ee90" }}
+                              >{`${formatDate[4]}  ${item.status[0]}  ...`}</Text>
+                            ) : (
+                              <Text
+                                style={{ fontSize: 15, color: "lightgray" }}
+                              >
+                                {`${formatDate[4]}`}{" "}
+                                <Text
+                                  style={{
+                                    color:
+                                      item.status === "Rejected"
+                                        ? "tomato"
+                                        : "lightgray"
+                                  }}
+                                >{`  ${item.status}...`}</Text>
+                              </Text>
+                            )}
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })
                 : null}
             </View>
           </View>

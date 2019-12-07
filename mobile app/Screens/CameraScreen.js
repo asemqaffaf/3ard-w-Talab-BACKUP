@@ -149,9 +149,9 @@ export default class FirebaseStorageUploader extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.msgContainer}>
-          <Text style={styles.msg}>choose a photo from gallery</Text>
-          <Text style={styles.msg}>or</Text>
-          <Text style={styles.msg}>shoot it</Text>
+          <Text style={styles.msg}>Choose a Photo from Gallery</Text>
+          <Text style={styles.msg}>Or</Text>
+          <Text style={styles.msg}>Shoot it</Text>
         </View>
 
         <View style={styles.buttonsContainer}>

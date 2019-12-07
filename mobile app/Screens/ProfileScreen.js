@@ -54,18 +54,20 @@ export default class Profile extends Component {
       .delete(`https://ardwtalabapp.herokuapp.com/posts/API/deletePost/${id}`)
       .then(res => console.log(res.data))
       .catch(err => alert(err.message))
-      .then(this.setState({ isVisible: false }));
+      .then(() => {
+        this.fetchUsersPosts();
+        this.setState({ isVisible: false });
+      });
   };
   logOut = async () => {
     await AsyncStorage.removeItem("userId");
     await AsyncStorage.removeItem("phoneNumber");
-    this.props.navigation.navigate("loginStack");
+    this.props.navigation.navigate("landingStack");
   };
   // post._id
   isVisible = isVisible => this.setState({ isVisible });
 
   render() {
-    this.fetchUsersPosts();
     return (
       <ScrollView style={styles.container}>
         <Modal isVisible={this.state.isVisible}>

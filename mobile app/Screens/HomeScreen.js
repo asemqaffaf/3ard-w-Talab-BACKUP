@@ -17,19 +17,18 @@ export default class Home extends Component {
     posts: [],
     post: null,
     isVisible: false,
-    width: Math.floor(Dimensions.get("window").width / 3)-2,
+    width: Math.floor(Dimensions.get("window").width / 3) - 2,
     refreshing: false,
-    userId : null
+    userId: null
   };
 
   componentDidMount() {
-
     this.getPosts();
   }
 
-  getPosts =async () => {
-    let userId = await AsyncStorage.getItem('userId')
-    this.setState({userId})
+  getPosts = async () => {
+    let userId = await AsyncStorage.getItem("userId");
+    this.setState({ userId });
     axios
       .get("https://ardwtalabapp.herokuapp.com/posts/API/data")
       .then(res => {
@@ -41,12 +40,12 @@ export default class Home extends Component {
       .catch(err => console.log({ message: err.message }));
   };
 
-  isVisible = (condition, post) => {
-    this.setState({ isVisible: condition, post });
+  isVisible = (isVisible, post) => {
+    this.setState({ isVisible, post });
   };
 
   render() {
-    let { width, posts, refreshing  } = this.state;
+    let { width, posts, refreshing } = this.state;
     return (
       <View style={styles.container}>
         <FlatList
@@ -71,7 +70,7 @@ export default class Home extends Component {
             isVisible={this.isVisible}
             post={this.state.post}
             getPosts={this.getPosts}
-            userId = {this.state.userId}
+            userId={this.state.userId}
           />
         </Modal>
       </View>

@@ -14,13 +14,11 @@ import axios from "axios";
 
 export default class AddPost extends Component {
   state = {
-    width: Dimensions.get("window").width,
     offer: null,
     pendingOffer: "", // please keep it as ""
     showOffer: false,
-    userId: this.props.userId != null ? this.props.userId : null,
-    ownerSellerId:
-      this.props.post["sellerID"] != null ? this.props.post["sellerID"] : null
+    userId: this.props.userId,
+    ownerSellerId: this.props.post["sellerID"]
   };
 
   componentDidMount() {
@@ -33,9 +31,11 @@ export default class AddPost extends Component {
       this.setState({ offer: this.props.post[userId].price, showOffer: true });
     }
   };
+
   makeOffer = pendingOffer => {
     this.setState({ pendingOffer });
   };
+
   submitOffer = () => {
     this.textInput.clear();
     let buyerId = this.props.userId;
@@ -52,13 +52,12 @@ export default class AddPost extends Component {
         .then(res => {
           this.setState({ offer, showOffer: true });
           this.props.getPosts();
-          // this.props.isVisible(false)
         })
         .catch(err => console.log(err));
   };
 
   render() {
-    let { width, offer, showOffer } = this.state;
+    let { offer, showOffer } = this.state;
     if (this.props.post === undefined) return null;
     let {
       name,
@@ -68,10 +67,16 @@ export default class AddPost extends Component {
       imgUrl
     } = this.props.post;
     let { userId, ownerSellerId } = this.state;
+
     return (
       <ScrollView>
         <View style={styles.container}>
-          <View style={{ flexDirection: "row-reverse" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={{ fontSize: 27, marginLeft: 20, marginTop: 5 }}>
+              {name}
+            </Text>
             <TouchableOpacity
               style={styles.backButton}
               onPress={() => this.props.isVisible(false)}
@@ -80,24 +85,22 @@ export default class AddPost extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.bodyContent}>
-            <Text style={{ fontSize: 27, marginBottom: 50 }}>{name}</Text>
             <Image
               source={{ uri: imgUrl }}
-              // style={{ width: width, height: width / 1.5 }}
-              style={{ width: vw(80), height: vh(50) / 1.5 }}
+              style={{ width: vw(100), height: vh(40) / 1.5 }}
             />
             <View style={styles.textContainer}>
               <Text style={styles.textWrapper}>
-                <Text style={styles.text}>Post Category: </Text>
+                <Text style={styles.text}>Location: </Text>
+                {location}
+              </Text>
+              <Text style={styles.textWrapper}>
+                <Text style={styles.text}>Category: </Text>
                 {postCategories}
               </Text>
               <Text style={styles.textWrapper}>
-                <Text style={styles.text}>Additional Info: </Text>
+                <Text style={styles.text}>Info: </Text>
                 {additionalInfo}
-              </Text>
-              <Text style={styles.textWrapper}>
-                <Text style={styles.text}>Location: </Text>
-                {location}
               </Text>
             </View>
             {userId !== ownerSellerId ? (
@@ -109,6 +112,14 @@ export default class AddPost extends Component {
                   alignItems: "center"
                 }}
               >
+                <View
+                  style={{
+                    width: vw(80),
+                    borderTopColor: "black",
+                    borderTopWidth: 1,
+                    paddingTop: 10
+                  }}
+                />
                 {showOffer === false ? null : (
                   <View style={styles.textWrapper}>
                     <Text style={styles.text}>You have made an offer for </Text>
@@ -136,7 +147,9 @@ export default class AddPost extends Component {
                 </TouchableOpacity>
               </View>
             ) : (
-              <Text style={{ color: "red" }}>You've made this post!</Text>
+              <Text style={{ color: "red", marginVertical: 25 }}>
+                You've made this post!
+              </Text>
             )}
           </View>
         </View>
@@ -155,8 +168,7 @@ const styles = StyleSheet.create({
 
   bodyContent: {
     flex: 1,
-    alignItems: "center",
-    padding: 30
+    alignItems: "center"
   },
 
   backButton: {
@@ -198,15 +210,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
 
+  line: {
+    borderBottomColor: "black",
+    borderBottomWidth: 1
+  },
+
   textWrapper: {
     justifyContent: "center",
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 15
   },
 
   textContainer: {
     flex: 1,
     fontSize: 15,
-    marginTop: 50
+    marginTop: 20,
+    marginBottom: 10
   }
 });

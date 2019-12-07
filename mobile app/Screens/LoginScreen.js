@@ -4,6 +4,7 @@ import {
   Text,
   ScrollView,
   TextInput,
+  Image,
   StyleSheet,
   TouchableOpacity,
   AsyncStorage
@@ -11,6 +12,7 @@ import {
 import Modal from "react-native-modal";
 import SignUp from "./SignUpScreen";
 import axios from "axios";
+import { vw, vh } from "react-native-expo-viewport-units";
 
 export default class LoginScreen extends Component {
   state = {
@@ -62,7 +64,7 @@ export default class LoginScreen extends Component {
       })
       .then(async response => {
         await AsyncStorage.setItem("userId", response.data.userId);
-        await AsyncStorage.setItem("phoneNumber", response.data.phoneNumber)
+        await AsyncStorage.setItem("phoneNumber", response.data.phoneNumber);
         this.setState({
           isLoggedIn: true,
           getId: await AsyncStorage.getItem("userId")
@@ -73,7 +75,7 @@ export default class LoginScreen extends Component {
         this.setState({
           isLoggedIn: false
         });
-        alert(err.message)
+        alert(err.message);
       });
   };
 
@@ -82,7 +84,7 @@ export default class LoginScreen extends Component {
       isVisible: isVisible,
       isLoggedIn: isLoggedIn
     });
-    if(isLoggedIn){
+    if (isLoggedIn) {
       this.props.navigation.navigate("tabNavigator");
     }
   };
@@ -91,6 +93,14 @@ export default class LoginScreen extends Component {
       <>
         <ScrollView>
           <View style={styles.body}>
+            <Image
+              source={{
+                uri:
+                  "https://cdn1.iconfinder.com/data/icons/hawcons/32/698889-icon-146-tag-512.png"
+              }}
+              style={{ width: vw(75), height: vh(40), marginTop:vh(-3), marginBottom: vh(3)}}
+            />
+
             <TextInput
               style={styles.input}
               placeholder="  Email Address"
@@ -109,7 +119,7 @@ export default class LoginScreen extends Component {
               onPress={this.submitHandler}
             >
               <Text style={{ color: "white", fontWeight: "bold" }}>
-                Sign in
+                Log in
               </Text>
             </TouchableOpacity>
           </View>
@@ -128,7 +138,7 @@ export default class LoginScreen extends Component {
               onPress={() => this.setState({ isVisible: true })}
             >
               <Text style={{ color: "#4280c8", fontWeight: "bold" }}>
-                Sign up
+                Register
               </Text>
             </TouchableOpacity>
           </View>
@@ -146,7 +156,6 @@ LoginScreen.navigationOptions = {
 };
 const styles = StyleSheet.create({
   body: {
-    marginTop: 60 + "%",
     flexDirection: "column",
     alignItems: "center"
   },
@@ -157,11 +166,11 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     width: "90%",
     height: 50,
-    borderRadius: 2,
-    marginTop: -1
+    borderRadius: 15,
+    marginTop: vh(1)
   },
   buttonContainer: {
-    marginTop: 10,
+    marginTop: vh(1),
     height: 45,
     flexDirection: "row",
     justifyContent: "center",
@@ -183,7 +192,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#cbdcf0"
   },
   signUp: {
-    marginTop: 45 + "%",
+    marginTop: vh(10),
     flexDirection: "column",
     alignItems: "center"
   }

@@ -1,5 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Platform
+} from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { storage } from "../config/firebaseConfig";
@@ -58,7 +64,7 @@ export default class FirebaseStorageUploader extends Component {
             .child(name)
             .getDownloadURL()
             .then(url => {
-              this.setState({ url, progress:0, isVisible: true });
+              this.setState({ url, progress: 0, isVisible: true });
             });
         }
       );
@@ -125,16 +131,18 @@ export default class FirebaseStorageUploader extends Component {
     }
   };
 
-  isVisible = condition => {
+  isVisible = (condition, from) => {
     this.setState({ isVisible: condition, progress: 0 });
-    this.props.navigation.navigate("landingStack");
+    if (from !== "cancel") {
+      this.props.navigation.navigate("landingStack");
+    }
   };
 
   render() {
     if (this.state.progress > 0)
       return (
         <View style={styles.activity}>
-          <ActivityIndicator size={75} color="#2196f3" />
+          <ActivityIndicator size="large" color="#2196f3" />
           <Text>Uploading...</Text>
         </View>
       );

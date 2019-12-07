@@ -9,6 +9,7 @@ import {
   AsyncStorage
 } from "react-native";
 import axios from "axios";
+import { vh } from "react-native-expo-viewport-units";
 
 export default class AddPost extends Component {
   state = {
@@ -38,17 +39,18 @@ export default class AddPost extends Component {
       )
       .then(res => console.log(res.data))
       .catch(err => console.log(err));
-       this.props.isVisible(false);
+    this.props.isVisible(false,'submitted');
   };
 
   render() {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <View style={{ flexDirection: "row-reverse" }}>
+          <View style={{  flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={{ fontSize: 27, marginLeft: 20, marginTop: 5 }}>Add Post</Text>
             <TouchableOpacity
               style={styles.backButton}
-              onPress={() => this.props.isVisible(false)}
+              onPress={() => this.props.isVisible(false,'cancel')}
             >
               <Text style={{ color: "#4280c8", fontWeight: "400" }}>
                 Cancel
@@ -56,25 +58,24 @@ export default class AddPost extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.bodyContent}>
-            <Text style={{ fontSize: 27, marginBottom: 50 }}>Add Post</Text>
             <TextInput
               style={styles.input}
-              placeholder="Post Title"
+              placeholder="  Post Title"
               onChangeText={event => this.postData(event, "name")}
             ></TextInput>
             <TextInput
               style={styles.input}
-              placeholder="Category"
+              placeholder="  Category"
               onChangeText={event => this.postData(event, "postCategories")}
             ></TextInput>
             <TextInput
               style={styles.input}
-              placeholder="Location"
+              placeholder="  Location"
               onChangeText={event => this.postData(event, "location")}
             ></TextInput>
             <TextInput
               style={styles.input}
-              placeholder="Description"
+              placeholder="  Additional Info"
               onChangeText={event => this.postData(event, "additionalInfo")}
             ></TextInput>
             <TouchableOpacity
@@ -120,11 +121,11 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     width: "90%",
     height: 50,
-    borderRadius: 2,
-    marginTop: 5
+    borderRadius: 15,
+    marginTop: vh(3)
   },
   buttonContainer: {
-    marginTop: 10,
+    marginTop: vh(8),
     height: 40,
     flexDirection: "row",
     justifyContent: "center",

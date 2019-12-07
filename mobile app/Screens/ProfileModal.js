@@ -29,9 +29,9 @@ export default class BuyerModal extends Component {
                             justifyContent: "center",
                             alignItems: "center"
                         }}><View>
-                        <Text>{JSON.stringify(this.props.selectedPost.name)}</Text>
-                        <Text>{JSON.stringify(this.props.selectedPost.postCategories)}</Text>
-                        <Text>{JSON.stringify(this.props.selectedPost.location)}</Text>
+                        <Text>{`Name: ${this.props.selectedPost.name}`}</Text>
+                        <Text>{`Category ${this.props.selectedPost.postCategories}`}</Text>
+                        <Text>{`Location ${this.props.selectedPost.location}`}</Text>
                         </View>
                     </View>
                     <TouchableOpacity
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         width: 250,
         borderRadius: 30,
-        backgroundColor: 'tomato',
+        backgroundColor: 'red',
       },
 
     text: {

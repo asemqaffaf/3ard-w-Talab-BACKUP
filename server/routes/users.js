@@ -84,7 +84,7 @@ async function verifyAccount(user) {
     let p = new Promise((resolve, reject) => {
         users.forEach(usr => {
             if (usr.email === user.email && usr.password === user.password) {
-                resolve({userId : usr._id ,username : usr.name , phoneNumber : usr.phoneNumber})
+                resolve({userId : usr._id ,username : usr.name , phoneNumber : usr.phoneNumber, email : usr.email })
             }
         })
         reject('no user found')

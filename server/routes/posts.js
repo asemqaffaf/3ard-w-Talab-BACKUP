@@ -101,7 +101,7 @@ async function sellerOffers(sellerID) {
                 if (post._doc.sellerID === sellerID) {
                     Object.keys(post._doc).map(key => {
                         if (post._doc[key].price != null) {
-                            arr.push({ imgUrl: post._doc.imgUrl, price: post._doc[key].price,status: post._doc[key].status , name: post._doc.name, postCategories: post._doc.postCategories, location: post._doc.location, key, offerMaker: key, postId: post._doc[key].id })
+                            arr.push({ imgUrl: post._doc.imgUrl, price: post._doc[key].price,status: post._doc[key].status , name: post._doc.name, postCategories: post._doc.postCategories, location: post._doc.location, key, offerMaker: key, postId: post._doc[key].id , additionalInfo : post._doc.additionalInfo })
                         }
                     })
                 }
@@ -305,6 +305,11 @@ router.get('/getUserPosts',async (request, response)=>{
     }   catch{
         response.status(500).json(err)
     }
+   })
+   router.delete('/deleteUserPosts',async(request,response)=>{
+       await postsData.remove({test:0},(err,doc)=>{
+        response.json(doc)
+       })
    })
 module.exports = router
 

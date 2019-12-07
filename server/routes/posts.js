@@ -115,15 +115,19 @@ async function sellerOffers(sellerID) {
     return arr
 }
 async function buyerOffers(buyerName) {
-    let arr = [] //buyer889111
+    let arr = [] 
     let data = postsData.find()
     await data.then((DATA) => {
         DATA.map(post => {
             if (post._doc[buyerName] != null) {
-                // console.log(post._id)
-                // arr.push({id:post._doc._id,imgUrl:post._doc.imgUrl})
-                arr.push(post._doc.imgUrl)
-                arr.push(post._doc[buyerName])
+                let newObj = post._doc[buyerName]
+                newObj['imgUrl'] = post._doc.imgUrl
+                newObj['id']  = post._doc._id
+                newObj['name'] = post._doc.name
+                newObj['postCategories']  = post._doc.postCategories
+                newObj['location'] =  post._doc.location
+                newObj['additionalInfo'] = post._doc.additionalInfo
+                arr.push(newObj)
             }
         })
         arr = (arr.length === 0 ? [] : arr)

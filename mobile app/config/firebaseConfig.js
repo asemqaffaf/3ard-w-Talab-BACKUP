@@ -2,14 +2,13 @@ import firebase from "../node_modules/@firebase/app";
 import "../node_modules/@firebase/storage";
 
 var Config = {
-  apiKey: "AIzaSyCcZgU21OQuN0sDfWZtzfrwoV4IuXjP_oA",
-  authDomain: "ard-w-taleb.firebaseapp.com",
-  databaseURL: "https://ard-w-taleb.firebaseio.com",
-  projectId: "ard-w-taleb",
-  storageBucket: "ard-w-taleb.appspot.com",
-  messagingSenderId: "844381537042",
-  appId: "1:844381537042:web:e64056c1642bdc1b05a9cb",
-  measurementId: "G-GN14TWJRHC"
+  apiKey: "AIzaSyC5n8K36r44yEkafOd6Cyf2CjSFmcD0ioI",
+  authDomain: "ardwtalab-b5d8c.firebaseapp.com",
+  databaseURL: "https://ardwtalab-b5d8c.firebaseio.com",
+  projectId: "ardwtalab-b5d8c",
+  storageBucket: "ardwtalab-b5d8c.appspot.com",
+  messagingSenderId: "875941737379",
+  appId: "1:875941737379:web:6485c36e9b9cdc6f322016"
 };
 
 firebase.initializeApp(Config);

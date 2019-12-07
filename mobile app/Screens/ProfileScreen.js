@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from 'axios'
+import axios from "axios";
 import {
   StyleSheet,
   Text,
@@ -9,69 +9,71 @@ import {
   ScrollView,
   AsyncStorage
 } from "react-native";
-import { vw, vh } from 'react-native-expo-viewport-units';
-import Modal from 'react-native-modal'
-import ProfileModal from './ProfileModal'
+import { vw, vh } from "react-native-expo-viewport-units";
+import Modal from "react-native-modal";
+import ProfileModal from "./ProfileModal";
 export default class Profile extends Component {
-  state={
-    userId : null,
-    phoneNumber : null,
-    posts : [],
-    selectedPost : null,
-    isVisible : false
+  state = {
+    userId: null,
+    phoneNumber: null,
+    posts: [],
+    selectedPost: null,
+    isVisible: false
+  };
+  componentDidMount() {
+    this.fetchUsersPosts();
+    this.getUserInfo();
   }
-  componentDidMount(){
-    this.fetchUsersPosts()
-    this.getUserInfo()
-  }
-  fetchUsersPosts = async()=>{
-    let sellerID = await AsyncStorage.getItem("userId")
-      axios.get('https://ardwtalabapp.herokuapp.com/posts/API/getUserPosts',{
-        params :{
-          sellerID 
+  fetchUsersPosts = async () => {
+    let sellerID = await AsyncStorage.getItem("userId");
+    axios
+      .get("https://ardwtalabapp.herokuapp.com/posts/API/getUserPosts", {
+        params: {
+          sellerID
         }
       })
-      .then(res=>this.setState({posts : res.data}))
-      .catch(err=>console.log(err))
-  }
-  getUserInfo= async()=>{
-    let userId = await AsyncStorage.getItem("userId")
-    let phoneNumber = await AsyncStorage.getItem("phoneNumber")
+      .then(res => this.setState({ posts: res.data }))
+      .catch(err => console.log(err));
+  };
+  getUserInfo = async () => {
+    let userId = await AsyncStorage.getItem("userId");
+    let phoneNumber = await AsyncStorage.getItem("phoneNumber");
 
-    this.setState({userId,phoneNumber})
-  }
+    this.setState({ userId, phoneNumber });
+  };
 
-  postInfoHandler=(selectedPost,isVisible)=>{
-    this.setState({selectedPost,isVisible})
-console.log(selectedPost)
-  }
-  deletePost = (id)=>{
-  console.log(id)
-// `http://localhost:5000/posts/API/deletePost/${id}`
-// '
-    axios.delete(`https://ardwtalabapp.herokuapp.com/posts/API/deletePost/${id}`)
-    .then(res=>console.log(res.data))
-    .catch(err=>alert(err.message))
-    .then(this.setState({isVisible : false}))
-  }
+  postInfoHandler = (selectedPost, isVisible) => {
+    this.setState({ selectedPost, isVisible });
+    console.log(selectedPost);
+  };
+  deletePost = id => {
+    console.log(id);
+    // `http://localhost:5000/posts/API/deletePost/${id}`
+    // '
+    axios
+      .delete(`https://ardwtalabapp.herokuapp.com/posts/API/deletePost/${id}`)
+      .then(res => console.log(res.data))
+      .catch(err => alert(err.message))
+      .then(this.setState({ isVisible: false }));
+  };
   logOut = async () => {
     await AsyncStorage.removeItem("userId");
-    await AsyncStorage.removeItem("phoneNumber")
+    await AsyncStorage.removeItem("phoneNumber");
     this.props.navigation.navigate("loginStack");
   };
   // post._id
-  isVisible = (isVisible) => this.setState({ isVisible })
+  isVisible = isVisible => this.setState({ isVisible });
 
   render() {
-    this.fetchUsersPosts()
+    this.fetchUsersPosts();
     return (
       <ScrollView style={styles.container}>
         <Modal isVisible={this.state.isVisible}>
-        <ProfileModal 
-        selectedPost={this.state.selectedPost} 
-        deletePost = {this.deletePost}
-        isVisible= {this.isVisible}
-        ></ProfileModal>
+          <ProfileModal
+            selectedPost={this.state.selectedPost}
+            deletePost={this.deletePost}
+            isVisible={this.isVisible}
+          ></ProfileModal>
         </Modal>
         <View style={styles.header}></View>
         <Image
@@ -79,32 +81,65 @@ console.log(selectedPost)
           source={{ uri: "https://bootdey.com/img/Content/avatar/avatar6.png" }}
         />
         <View style={styles.bodyContent}>
-          <Text style={styles.name}>{`Phone number ${this.state.phoneNumber}`}</Text>
+          <Text
+            style={styles.name}
+          >{`Phone number ${this.state.phoneNumber}`}</Text>
           <Text style={styles.info}> Web designer / Mobile developer</Text>
           <Text style={styles.description}>
             Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum
             electram expetendis, omittam deseruisse consequuntur ius an,
           </Text>
 
-          {this.state.posts.map((post,index)=>{
+          {this.state.posts.map((post, index) => {
             return (
               <View key={index}>
-              <TouchableOpacity  onPress={() => { this.postInfoHandler(post, true) }}>
-              <View  >
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.postInfoHandler(post, true);
+                  }}
+                >
                   <View>
-                    <Image
-                      source={{ uri: 'http://gregfranko.com/images/JavaScript-logo-small.png' }}
-                      style={{ width: vw(20), height: vh(9), borderRadius: 40, margin: vh(.2) }} />
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        alignItems: "flex-start"
+                      }}
+                    >
+                      <View>
+                        <Image
+                          source={{
+                            uri:
+                              "http://gregfranko.com/images/JavaScript-logo-small.png"
+                          }}
+                          style={{
+                            width: vw(20),
+                            height: vh(9),
+                            borderRadius: 40,
+                            margin: vh(0.2)
+                          }}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          margin: vw(1),
+                          width: vw(60),
+                          borderRadius: 10,
+                          backgroundColor: "#4280c8",
+                          fontWeight: "400",
+                          padding: 10,
+                          marginTop: vh(2)
+                        }}
+                      >
+                        <Text style={{ fontSize: 20, color: "white" }}>
+                          {post.name}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
-                  <View style={{ margin: vw(1), width: vw(60), borderRadius: 10, backgroundColor: '#4280c8', fontWeight: '400', padding: 10, marginTop: vh(2) }}>
-                    <Text style={{ fontSize: 20, color: 'white' }}>{post.name}</Text>
-                  </View>
-                </View>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-            </View>
-              )
+            );
           })}
           <TouchableOpacity
             style={styles.buttonContainer}
@@ -113,11 +148,11 @@ console.log(selectedPost)
             <Text>Log Out</Text>
           </TouchableOpacity>
           <TouchableOpacity
-          style={styles.deleteButtonContainer}
-          onPress={this.fetchUsersPosts}
-        >
-          <Text style={{color: 'white'}}>DELETE ACCOUNT</Text>
-        </TouchableOpacity>
+            style={styles.deleteButtonContainer}
+            onPress={this.fetchUsersPosts}
+          >
+            <Text style={{ color: "white" }}>DELETE ACCOUNT</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     );
@@ -187,7 +222,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: 250,
     borderRadius: 30,
-    backgroundColor: 'tomato',
+    backgroundColor: "tomato"
   }
 });
 

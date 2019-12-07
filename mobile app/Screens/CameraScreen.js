@@ -58,7 +58,7 @@ export default class FirebaseStorageUploader extends Component {
             .child(name)
             .getDownloadURL()
             .then(url => {
-              this.setState({ url, isVisible: true });
+              this.setState({ url, progress:0, isVisible: true });
             });
         }
       );

@@ -91,11 +91,11 @@ export default class SellerScreen extends Component {
             {this.state.offers.map((item, index) => {
               return (
                 <TouchableOpacity key={index} onPress={() => { this.detailsHandler(item, true) }}>
-                  <View  >
+                  <View>
                     <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start' }}>
                       <View>
                         <Image
-                          source={{ uri: 'http://gregfranko.com/images/JavaScript-logo-small.png' }}
+                          source={{ uri: 'https://miro.medium.com/max/785/1*H-25KB7EbSHjv70HXrdl6w.png' }}
                           style={{ width: vw(20), height: vh(9), borderRadius: 40, margin: vh(.2) }} />
                       </View>
                       <View style={{ margin: vw(1), width: vw(60), borderRadius: 10, backgroundColor: '#4280c8', fontWeight: '400', padding: 10, marginTop: vh(2) }}>

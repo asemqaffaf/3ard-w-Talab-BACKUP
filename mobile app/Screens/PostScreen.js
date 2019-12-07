@@ -9,6 +9,7 @@ import {
   Image,
   Dimensions
 } from "react-native";
+import { vw, vh } from "react-native-expo-viewport-units";
 import axios from "axios";
 
 export default class AddPost extends Component {
@@ -82,7 +83,8 @@ export default class AddPost extends Component {
             <Text style={{ fontSize: 27, marginBottom: 50 }}>{name}</Text>
             <Image
               source={{ uri: imgUrl }}
-              style={{ width: width, height: width / 1.5 }}
+              // style={{ width: width, height: width / 1.5 }}
+              style={{ width: vw(80), height: vh(50) / 1.5 }}
             />
             <View style={styles.textContainer}>
               <Text style={styles.textWrapper}>

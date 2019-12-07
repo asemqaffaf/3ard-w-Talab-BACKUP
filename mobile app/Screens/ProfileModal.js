@@ -19,7 +19,7 @@ export default class BuyerModal extends Component {
                     </View>
                     <View style={styles.bodyContent}>
                     <Image
-                    source={{ uri: 'http://gregfranko.com/images/JavaScript-logo-small.png' }}
+                    source={{ uri: this.props.selectedPost.imgUrl }}
                     style={{ width: vw(80), height: vh(50) / 1.5 }}
                   />
                     <View

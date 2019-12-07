@@ -1,10 +1,17 @@
-import React, { Component } from 'react'
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native'
-import { vw, vh } from 'react-native-expo-viewport-units';
+import React, { Component } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  TextInput
+} from "react-native";
+import { vw, vh } from "react-native-expo-viewport-units";
 
 export default class SellerModal extends Component {
   render() {
-
     return (
       <ScrollView>
         <View style={styles.container}>
@@ -17,9 +24,11 @@ export default class SellerModal extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.bodyContent}>
-            <Text style={{ fontSize: 27, marginBottom: 50 }}>{this.props.post.name}</Text>
+            <Text style={{ fontSize: 27, marginBottom: 50 }}>
+              {this.props.post.name}
+            </Text>
             <Image
-              source={{ uri: 'http://gregfranko.com/images/JavaScript-logo-small.png' }}
+              source={{ uri: this.props.post.imgUrl }}
               style={{ width: vw(80), height: vh(50) / 1.5 }}
             />
             <View style={styles.textContainer}>
@@ -37,25 +46,38 @@ export default class SellerModal extends Component {
               </Text>
               <Text style={styles.textWrapper}>
                 <Text style={styles.text}>Status: </Text>
-                { Array.isArray(this.props.post.status) ? this.props.post.status[0] : this.props.post.status }
+                {Array.isArray(this.props.post.status)
+                  ? this.props.post.status[0]
+                  : this.props.post.status}
               </Text>
             </View>
-            {this.props.post.status === 'pending' ? <View
-              style={{
-                flexDirection: 'column',
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-
-              <TouchableOpacity style={styles.buttonContainerDenied} onPress={() => this.props.deniedOfferHandler(this.props.post)}>
-                <Text style={{ color: 'white', fontSize: 20 }}>Denied</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.buttonContainerAccept} onPress={() => this.props.acceptOfferHandler(this.props.post)}>
-                <Text style={{ color: 'white', fontSize: 20 }}>Accept</Text></TouchableOpacity>
-            </View>
-              : <Text style={{ color: 'red' }}>You've already responded to this Offer! </Text>}
-
+            {this.props.post.status === "pending" ? (
+              <View
+                style={{
+                  flexDirection: "column",
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <TouchableOpacity
+                  style={styles.buttonContainerDenied}
+                  onPress={() => this.props.deniedOfferHandler(this.props.post)}
+                >
+                  <Text style={{ color: "white", fontSize: 20 }}>Denied</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonContainerAccept}
+                  onPress={() => this.props.acceptOfferHandler(this.props.post)}
+                >
+                  <Text style={{ color: "white", fontSize: 20 }}>Accept</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <Text style={{ color: "red" }}>
+                You've already responded to this Offer!{" "}
+              </Text>
+            )}
           </View>
         </View>
       </ScrollView>

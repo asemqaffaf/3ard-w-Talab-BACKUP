@@ -109,8 +109,7 @@ export default class Profile extends Component {
                       <View>
                         <Image
                           source={{
-                            uri:
-                              "http://gregfranko.com/images/JavaScript-logo-small.png"
+                            uri: post.imgUrl
                           }}
                           style={{
                             width: vw(20),

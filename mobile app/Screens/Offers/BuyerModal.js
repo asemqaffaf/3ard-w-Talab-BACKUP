@@ -5,7 +5,7 @@ import { vw, vh } from 'react-native-expo-viewport-units';
 export default class BuyerModal extends Component {
 
   render() {
-   
+    let dateFormat = this.props.post.date.split(" ")
 return (
   <ScrollView>
     <View style={styles.container}>
@@ -18,13 +18,24 @@ return (
         </TouchableOpacity>
       </View>
       <View style={styles.bodyContent}>
-        <Text style={{ fontSize: 27, marginBottom: 50 }}>{"Status: " + this.props.post.status + ".."}</Text>
-
+      {Array.isArray(this.props.post.status) ?  
+        <View>
+        <Text style={{ fontSize: vw(5), marginBottom: 50 , color: 'green'}}>{"Congrats! your offer has been " + this.props.post.status[0] + "!!" }</Text>
+        <Text style={{ fontSize:  vw(5), marginBottom: 50 }}>{"Please Contact me at this number " + this.props.post.status[1]}</Text>
+        </View> :
+        this.props.post.status === 'Rejected' ? 
+        <Text style={{ fontSize: vw(5), marginBottom: 50, color:'red' }}>{"Unfortunately your offer has been : " + this.props.post.status + "!" }</Text>
+        :
+        <Text style={{ fontSize: vw(5), marginBottom: 50 }}>{"Status: " + this.props.post.status + ".." }</Text>
+        }
         <Image
           source={{ uri: 'http://gregfranko.com/images/JavaScript-logo-small.png' }}
           style={{ width: vw(80), height: vh(50) / 1.5 }}
         />
         <View style={styles.textContainer}>
+
+        <Text style={{ fontSize: 24  }}>{`Your Offer ${this.props.post.price}`}</Text>
+        <Text style={{ fontSize: 14 }}>{`Date: ${dateFormat[0]} ${dateFormat[1]} ${dateFormat[2]}`}</Text>
 
         </View>
           <View
@@ -35,8 +46,6 @@ return (
               alignItems: "center"
             }}
           >
-          <Text style={{ fontSize: 17, marginBottom: 50 }}>{JSON.stringify(this.props.post.price)}</Text>
-
           <TouchableOpacity  style={styles.buttonContainer} onPress={()=>this.props.deleteOfferHandler(this.props.post)}>
           <Text style={{ color:'white' , fontSize:20}}>Delete this Post!</Text>
           </TouchableOpacity>
@@ -60,7 +69,8 @@ marginTop: 40
 bodyContent: {
 flex: 1,
 alignItems: "center",
-padding: 30
+padding: 1,
+
 },
 
 backButton: {
@@ -109,7 +119,7 @@ marginBottom: 15
 textContainer: {
 flex: 1,
 fontSize: 15,
-marginTop: 50
+marginTop: 10
 }
 });
 
@@ -129,3 +139,9 @@ marginTop: 50
 // <Text style={styles.text}>Location: </Text>
 // {this.props.post.location}
 // </Text>
+
+
+// {this.props.post.status === 'Rejected' ? 
+        
+// <Text style={{ fontSize: vw(5), marginBottom: 50, color='red' }}>{"Unfortunately your offer has been : " + this.props.post.status + ".." }</Text> :
+// <Text style={{ fontSize: vw(5), marginBottom: 50 }}>{"Status: " + this.props.post.status + ".." }</Text>}

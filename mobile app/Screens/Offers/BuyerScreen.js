@@ -74,7 +74,8 @@ export default class BuyerScreen extends Component {
                   <View style={{ margin: vw(.5), width: vw(70), borderRadius: 10, backgroundColor: '#4280c8', fontWeight: '400', padding: 10 }}>
                     <Text>{formatDate[1] + " " + formatDate[2] + " " + formatDate[3]}</Text>
                     <Text style={{ fontSize: 20, color: 'white' }}>{"Price " + item.price} </Text>
-                    <Text style={{ color: 'lightgray' }}>{formatDate[4] + " " + item.status + '...'}</Text>
+                    {Array.isArray(item.status) ? <Text style={{ fontSize: 15,color: 'lightgray' }}>{`${formatDate[4]}  ${item.status[0]}  ...`}</Text> :
+                    <Text style={{ fontSize: 15,color: 'lightgray' }}>{`${formatDate[4]}  ${item.status}  ...`}</Text>}
                   </View>
                   </TouchableOpacity>
                   )

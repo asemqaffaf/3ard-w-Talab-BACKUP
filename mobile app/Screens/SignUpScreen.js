@@ -1,17 +1,19 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, AsyncStorage} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, AsyncStorage } from 'react-native'
 import axios from 'axios'
 
 export default class SignUp extends Component {
   state = {
     name: '',
     email: '',
-    password: ''
+    password: '',
+    phoneNumber: ''
   }
   signUpHandler = (event, name) => {
     const regexEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/
     const regexPassword = /^[0-9a-zA-Z]{8,}$/
     const regexName = /^[a-zA-Z]{3,}$/
+    const regexPhone = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
     if (name === 'name') {
       this.state.name = event
       if (regexName.test(event)) {
@@ -36,24 +38,32 @@ export default class SignUp extends Component {
         })
       }
     }
+    else if (name === 'phoneNumber') {
+      this.state.phoneNumber = event
+      if (regexPhone.test(event)) {
+        this.setState({
+          [name]: event
+        })
+      }
+    }
   }
 
   submitHandler = () => {
     if (this.state.name != '' && this.state.email != '' && this.state.password != '') {
       // axios.post('http://192.168.86.33:9002/users/API/new', {
       axios.post('https://ardwtalabapp.herokuapp.com/users/API/new', {
-
         name: this.state.name,
         "email": this.state.email,
-        "password": this.state.password
+        "password": this.state.password,
+        'phoneNumber' : this.state.phoneNumber
       })
         .then(async response => {
-          await AsyncStorage.setItem("userId",response.data._id)
+          await AsyncStorage.setItem("userId", response.data._id)
+          await AsyncStorage.setItem("phoneNumber", response.data.phoneNumber)
           this.props.isVisibleHandler(false, true)
         })
         .catch(error => {
           alert(error.message)
-
         })
     }
 
@@ -69,9 +79,10 @@ export default class SignUp extends Component {
           </View>
           <View style={styles.bodyContent}>
             <Text style={{ fontSize: 27, marginBottom: 50 }}>Sign up</Text>
-            <TextInput style={styles.input} placeholder="  Full name" textContentType="emailAddress" onChangeText={(event) => this.signUpHandler(event, 'name')}></TextInput>
+            <TextInput style={styles.input} placeholder="  Full name" textContentType="name" onChangeText={(event) => this.signUpHandler(event, 'name')}></TextInput>
             <TextInput style={styles.input} placeholder="  Email Address" textContentType="emailAddress" onChangeText={(event) => this.signUpHandler(event, 'email')}></TextInput>
             <TextInput style={styles.input} placeholder="  Password" textContentType='password' secureTextEntry={true} onChangeText={(event) => this.signUpHandler(event, 'password')} ></TextInput>
+            <TextInput style={styles.input} placeholder="  Phone number" textContentType='telephoneNumber' keyboardType="number-pad" onChangeText={(event) => this.signUpHandler(event, 'phoneNumber')} ></TextInput>
             <TouchableOpacity style={styles.buttonContainer} onPress={this.submitHandler}>
               <Text style={{ color: 'white', fontWeight: 'bold' }}>Submit</Text>
             </TouchableOpacity>

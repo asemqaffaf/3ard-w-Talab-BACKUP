@@ -10,7 +10,26 @@
 #     	"imgUrl": "https://images.summitmedia-digital.com/topgear/images/2018/07/31/BMW-520d1.jpg"}
 
 # PATCH http://192.168.86.33:9002/posts/API/postOffers?id=5dcff00c05c23f2186fa8e58&buyer889111=85k
-# DELETE http://192.168.86.33:9002/posts/API/5dd00484a085e235612f478d
+# DELETE http://192.168.86.33:9002/posts/API/deletePost/:id
+# PUT http://localhost:5000/posts/API/acceptOffer
+# {
+#   "offerMaker": "5dd03af4694cc74c0fbe210d",
+#   "postId": "5de910a529980e0017b1a010",
+#   "contactNumber" : "0797955153"
+# }
+# PUT http://localhost:5000/posts/API/deleteOffer/
+# {
+#   "offerMaker": "5dd03af4694cc74c0fbe210d",
+#   "postId": "5de7e856caab930017aac3bc"
+# }
+# PUT https://ardwtalabapp.herokuapp.com/posts/API/deniedOffer/
+# {
+#   "offerMaker": "5dd03af4694cc74c0fbe210d",
+#   "postId": "5de910a529980e0017b1a010"
+# }
+# DELETE http://localhost:5000/posts/API/deleteAtSpecificTime/111111111111
+
+# GET http://localhost:5000/posts/API/getUserPosts?sellerID=5dd03149694cc74c0fbe210c
 
 ###################### USERS ######################
 
@@ -20,6 +39,7 @@
 # {
 #  "name":"ASEM22", 
 #     "email": "ADAM2@gmail.com",
-#     "password": "123456"
+#     "password": "123456",
+#     "phoneNumber" : "0788000288" 
 # }
 # DELETE http://192.168.86.33:9002/users/API/delete/5dd01115afc48440677b7285

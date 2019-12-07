@@ -53,13 +53,14 @@ async function verifyToCreateAccount(email) {
     return verified
 }
 router.post('/new', async (request, response) => {
-    let { name, email, password } = request.body
+    let { name, email, password , phoneNumber } = request.body
     email = email.toLowerCase()
     if (await verifyToCreateAccount(email)) {
         const user = new userDB({
             name : name.toLowerCase(), 
             email : email.toLowerCase(),
-            password : password.toLowerCase()
+            password : password.toLowerCase(),
+            phoneNumber
         })
         try {
             const newUser = await user.save()
@@ -83,7 +84,7 @@ async function verifyAccount(user) {
     let p = new Promise((resolve, reject) => {
         users.forEach(usr => {
             if (usr.email === user.email && usr.password === user.password) {
-                resolve(usr._id)
+                resolve({userId : usr._id ,username : usr.name , phoneNumber : usr.phoneNumber})
             }
         })
         reject('no user found')
@@ -93,7 +94,7 @@ async function verifyAccount(user) {
 
 router.get('/auth', async (request, response) => {
     await verifyAccount(request.query)
-        .then((userId) => response.status(202).json({ userID: userId }))
+        .then((userId) => response.status(202).json(userId))
         .catch((error) => response.status(400).json({ message: error }))
 })
 /*<=========================== End .verify an existence user  func.===========================>*/

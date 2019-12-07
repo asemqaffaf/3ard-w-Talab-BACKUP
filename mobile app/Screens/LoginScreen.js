@@ -61,7 +61,8 @@ export default class LoginScreen extends Component {
         }
       })
       .then(async response => {
-        await AsyncStorage.setItem("userId", response.data.userID);
+        await AsyncStorage.setItem("userId", response.data.userId);
+        await AsyncStorage.setItem("phoneNumber", response.data.phoneNumber)
         this.setState({
           isLoggedIn: true,
           getId: await AsyncStorage.getItem("userId")
@@ -72,7 +73,7 @@ export default class LoginScreen extends Component {
         this.setState({
           isLoggedIn: false
         });
-        alert("please check your email or password");
+        alert(err.message)
       });
   };
 
@@ -81,8 +82,10 @@ export default class LoginScreen extends Component {
       isVisible: isVisible,
       isLoggedIn: isLoggedIn
     });
+    if(isLoggedIn){
+      this.props.navigation.navigate("tabNavigator");
+    }
   };
-
   render() {
     return (
       <>

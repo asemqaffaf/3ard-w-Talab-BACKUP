@@ -101,7 +101,7 @@ async function sellerOffers(sellerID) {
                 if (post._doc.sellerID === sellerID) {
                     Object.keys(post._doc).map(key => {
                         if (post._doc[key].price != null) {
-                            arr.push({ imgUrl: post._doc.imgUrl, price: post._doc[key].price, name: post._doc.name, postCategories: post._doc.postCategories, location: post._doc.location, key, offerMaker: key, postId: post._doc[key].id })
+                            arr.push({ imgUrl: post._doc.imgUrl, price: post._doc[key].price,status: post._doc[key].status , name: post._doc.name, postCategories: post._doc.postCategories, location: post._doc.location, key, offerMaker: key, postId: post._doc[key].id })
                         }
                     })
                 }
@@ -214,14 +214,52 @@ const DeleteTimer = setInterval(() => {
     }
 }, 20000)
 router.put('/acceptOffer/', async (request, response) => {
-    console.log(request.body)
-    // instead of my name is Adam2  you have to pass another object with key phone number and value of it
-    let newObj = { [request.body.offerMaker]: { price: "My name is Adam2", date: Date(Date.now()), status: "Accepted", id: request.body.postId } }
-    try {
-        await postsData.findByIdAndUpdate(request.body.postId, newObj, (err, doc) => {
-            if (err) { response.status(400).json({ message: err.message }) }
-            else response.status(201).json(doc)
+    // console.log(request.body.contactNumber)
+    // response.json(request.body.contactNumber)
+    // return
+    await postsData.findById(request.body.postId, async (err, doc) => {
+        if (err) response.status(401).json(err)
+        else {
+            let post = doc._doc
+            let newObj = {}
+            for (key in post) {
+                if (typeof post[key] === 'object' && key !== '_id') {
+                    if (key === request.body.offerMaker) {
+                        post[key].status = ['Accepted', request.body.contactNumber]
+                    }
+                    else {
+                        post[key].status = 'Rejected'
+                    }
+                    newObj[key] = post[key]
+                }
 
+            }
+            try {
+                await postsData.findByIdAndUpdate(request.body.postId, newObj, (err, doc) => {
+                    if (err) { response.status(400).json({ message: err.message }) }
+                    else response.status(201).json(doc)
+
+                })
+            }
+            catch (err) {
+                response.status(500).json({ message: err.message })
+            }
+
+
+
+            // response.json(newObj)
+        }
+    })
+
+
+})
+router.put('/deniedOffer/', async (request, response) => {
+    // let { offerMaker, postId } = request.body
+    let query = request.body.offerMaker + '.status'
+    try {
+        await postsData.updateOne({ _id: request.body.postId }, { $set: { [query]: "Rejected" } }, (err, doc) => {
+            if (err) { response.status(400).json({ message: err.message }) }
+            else response.json(doc)
         })
     }
     catch (err) {
@@ -242,5 +280,40 @@ router.put('/deleteOffer/', async (request, response) => {
     }
 })
 /*<=========================== END. DELETE a Post  func.===========================>*/
-
+router.get('/getUserPosts',async (request, response)=>{
+    try{
+        let data = await postsData.find(request.query)
+        response.json(data)
+    }
+    catch{
+        response.status(500).json({err: err.message})
+    }
+   })
+   router.delete('/deletePost/:id', async(request,response)=>{
+       try{
+        await postsData.findByIdAndDelete(request.params.id,(err,doc)=>{
+            if(err){
+                response.status(404).json(err)
+            }else{
+                response.status(200).json(doc)
+            }
+       })
+    }   catch{
+        response.status(500).json(err)
+    }
+   })
 module.exports = router
+
+
+
+
+// let query = request.body.offerMaker+'.status'
+// try {
+//     await postsData.updateOne( {_id:request.body.postId}, {$set:{[query] : "Accepted"} }, (err, doc) => {
+//         if (err) { response.status(400).json({ message: err.message }) }
+//         else response.json(doc)
+//     })
+// }
+// catch (err) {
+//     response.status(500).json({ message: err.message })
+// }

@@ -10,7 +10,7 @@
 #     	"imgUrl": "https://images.summitmedia-digital.com/topgear/images/2018/07/31/BMW-520d1.jpg"}
 
 # PATCH http://192.168.86.33:9002/posts/API/postOffers?id=5dcff00c05c23f2186fa8e58&buyer889111=85k
-# DELETE http://192.168.86.33:9002/posts/API/deletePost/:id
+# DELETE http://192.168.86.33:9002/posts/API/g/:id
 # PUT http://localhost:5000/posts/API/acceptOffer
 # {
 #   "offerMaker": "5dd03af4694cc74c0fbe210d",

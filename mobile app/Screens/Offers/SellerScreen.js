@@ -42,7 +42,7 @@ export default class SellerScreen extends Component {
   }
   acceptOfferHandler = async (post) => {
     let { offerMaker, postId } = post
-    let contactNumber =  await AsyncStorage.getItem('phoneNumber')
+    let contactNumber = await AsyncStorage.getItem('phoneNumber')
     axios.delete(`https://ardwtalabapp.herokuapp.com/posts/API/deleteAtSpecificTime/${postId}`)
       .then(res => console.log(res.data))
       .catch(err => console.log(err.message))
@@ -56,7 +56,7 @@ export default class SellerScreen extends Component {
         })
         .catch(err => console.log(err))
       )
-      .then(() =>this.setState({ isVisible: false }))
+      .then(() => this.setState({ isVisible: false }))
 
   }
   deniedOfferHandler = (post) => {
@@ -69,12 +69,12 @@ export default class SellerScreen extends Component {
         this.fetchSellerOffers()
       })
       .catch(err => console.log(err))
-      .then(() =>this.setState({ isVisible: false }))
+      .then(() => this.setState({ isVisible: false }))
 
   }
   isVisible = (isVisible) => this.setState({ isVisible })
   render() {
-    this.fetchSellerOffers()
+    // this.fetchSellerOffers()
     return (
       <>
         <ScrollView>
@@ -89,21 +89,30 @@ export default class SellerScreen extends Component {
             </Modal>
 
             {this.state.offers.map((item, index) => {
+               statusColor = 'white'
+              if(item.status == 'Rejected'){
+                statusColor=  'tomato'
+              }
+              if(item.status[0] == 'Accepted'){
+              statusColor = '#90ee90'
+              }
               return (
                 <TouchableOpacity key={index} onPress={() => { this.detailsHandler(item, true) }}>
-                  <View>
-                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start' }}>
-                      <View>
-                        <Image
-                          source={{ uri: 'https://miro.medium.com/max/785/1*H-25KB7EbSHjv70HXrdl6w.png' }}
-                          style={{ width: vw(20), height: vh(9), borderRadius: 40, margin: vh(.2) }} />
-                      </View>
-                      <View style={{ margin: vw(1), width: vw(60), borderRadius: 10, backgroundColor: '#4280c8', fontWeight: '400', padding: 10, marginTop: vh(2) }}>
-                        <Text style={{ fontSize: 20, color: 'white' }}>{item.price}</Text>
+             
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start' , height : vh(10) }}>
+
+                      <Image
+                        // source={{ uri: item.imgUrl }}
+                        source={{ uri: 'http://www.websalution.com/wp-content/uploads/2019/08/icon.javascript.png' }}
+                        style={{ width: vw(20), height: vh(8), borderRadius: 8, margin: vw(1) }} />
+                      <View style={{ width: vw(70), borderRadius: 10, backgroundColor: '#2096F3', fontWeight: '400', padding: 10}}>
+                        <Text style={{ fontSize: 20, color: 'white' }}>{`You've got an offer: ${item.price} JOD`}</Text>
+                        <Text style={{ fontSize: 15, color: 'white' }}>{item.name}</Text>
+                        <Text style={{ fontSize: 15, color: `${statusColor}` }}>{Array.isArray(item.status) ? item.status[0] : item.status}</Text>
+
                       </View>
 
                     </View>
-                  </View>
                 </TouchableOpacity>
               )
             })}

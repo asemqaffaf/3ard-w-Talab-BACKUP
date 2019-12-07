@@ -23,19 +23,15 @@ export default class BuyerScreen extends Component {
     this.fetchBuyerSellerOffers();
   };
   fetchBuyerSellerOffers = async () => {
-    axios
-      .get("https://ardwtalabapp.herokuapp.com/posts/API/getOffers", {
-        params: {
-          buyerOffers: await AsyncStorage.getItem("userId")
-        }
-      })
+    axios.get('http://localhost:5000/posts/API/getOffers', {
+      params: {
+        buyerOffers: await AsyncStorage.getItem("userId")
+      }
+    })
       .then(res => {
         this.setState({ offers: res.data });
       })
       .catch(err => console.log(err));
-    // .then(() => {
-    //   console.log(this.state.offers[1])
-    // })
   };
   postHandler = (post, isVisible) => {
     this.setState({ post, isVisible });
@@ -73,64 +69,60 @@ export default class BuyerScreen extends Component {
                 alignItems: "flex-start"
               }}
             >
-              {this.state.offers !== null
-                ? this.state.offers.map(item => {
-                    if (typeof item != "object") {
-                      return (
-                        <Image
-                          key={item}
-                          source={{ uri: item }}
-                          style={{
-                            width: vw(20),
-                            height: vh(9),
-                            borderRadius: 40
-                          }}
-                        />
-                      );
-                    } else {
-                      let formatDate = item.date;
-                      formatDate = formatDate.split(" ");
-                      return (
-                        <TouchableOpacity
-                          key={item.date}
-                          onPress={() => {
-                            this.postHandler(item, true);
-                          }}
-                        >
-                          <View
-                            style={{
-                              margin: vw(0.5),
-                              width: vw(70),
-                              borderRadius: 10,
-                              backgroundColor: "#4280c8",
-                              fontWeight: "400",
-                              padding: 10
-                            }}
-                          >
-                            <Text>
-                              {formatDate[1] +
-                                " " +
-                                formatDate[2] +
-                                " " +
-                                formatDate[3]}
-                            </Text>
-                            <Text style={{ fontSize: 20, color: "white" }}>
-                              {"Price " + item.price}{" "}
-                            </Text>
-                            {Array.isArray(item.status) ? (
-                              <Text
-                                style={{ fontSize: 15, color: "lightgray" }}
-                              >{`${formatDate[4]}  ${item.status[0]}  ...`}</Text>
-                            ) : (
-                              <Text
-                                style={{ fontSize: 15, color: "lightgray" }}
-                              >{`${formatDate[4]}  ${item.status}  ...`}</Text>
-                            )}
-                          </View>
-                        </TouchableOpacity>
-                      );
-                    }
-                  })
+              {this.state.offers != null ? this.state.offers.map((item, index) => {
+                let formatDate = item.date;
+                formatDate = formatDate.split(" ");
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    onPress={() => {
+                      this.postHandler(item, true);
+                    }}>
+                    <View style={{flexDirection:'row', flexWrap : 'wrap'}}>
+
+                    <Image
+                      source={{ uri: item.imgUrl }}
+                      style={{
+                        width: vw(20),
+                        height: vh(9),
+                        borderRadius: 8
+                      }} />
+                    <View
+                      style={{
+                        margin: vw(0.5),
+                        width: vw(72),
+                        borderRadius: 10,
+                        backgroundColor: "#2096F3",
+                        fontWeight: "400",
+                        padding: 10
+                      }}>
+                      <Text>
+                        {formatDate[1] +
+                          " " +
+                          formatDate[2] +
+                          " " +
+                          formatDate[3]}
+                      </Text>
+                      <Text style={{ fontSize: 20, color: "white" }}>
+                        {`You've sent an offer for ${item.price} JOD`}
+                      </Text>
+                      {Array.isArray(item.status) ? (
+                        <Text
+                          style={{ fontSize: 15, color: "#90ee90" }}
+                        >{`${formatDate[4]}  ${item.status[0]}  ...`}</Text>
+                      ) : (
+                          <Text
+                            style={{ fontSize: 15, color: 'lightgray' }}
+                          >{`${formatDate[4]}`} <Text style={{color: item.status === 'Rejected' ? 'tomato': "lightgray"}}>{`  ${item.status}...`}</Text></Text>
+                        )}
+                    </View>
+                    </View>
+
+                  </TouchableOpacity>
+
+                )
+
+              })
                 : null}
             </View>
           </View>

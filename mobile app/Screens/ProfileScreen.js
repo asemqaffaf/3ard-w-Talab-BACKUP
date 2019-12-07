@@ -126,7 +126,7 @@ export default class Profile extends Component {
                           margin: vw(1),
                           width: vw(60),
                           borderRadius: 10,
-                          backgroundColor: "#4280c8",
+                          backgroundColor: "#2096F3",
                           fontWeight: "400",
                           padding: 10,
                           marginTop: vh(2)

@@ -25,6 +25,7 @@ export default class BuyerModal extends Component {
               <Text style={{ color: "#4280c8", fontWeight: "400" }}>Back</Text>
             </TouchableOpacity>
           </View>
+          <Text>{JSON.stringify(this.props.post)}</Text>
           <View style={styles.bodyContent}>
             {Array.isArray(this.props.post.status) ? (
               <View>
@@ -48,7 +49,7 @@ export default class BuyerModal extends Component {
               </Text>
             ) : (
               <Text style={{ fontSize: vw(5), marginBottom: 50 }}>
-                {"Status: " + this.props.post.status + ".."}
+                {`Status: ${this.props.post.status}..`}
               </Text>
             )}
             <Image
@@ -78,7 +79,7 @@ export default class BuyerModal extends Component {
                 onPress={() => this.props.deleteOfferHandler(this.props.post)}
               >
                 <Text style={{ color: "white", fontSize: 20 }}>
-                  Delete this Post!
+                  Delete this Offer!
                 </Text>
               </TouchableOpacity>
             </View>

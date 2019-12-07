@@ -71,6 +71,8 @@ export default class SignUp extends Component {
         .then(async response => {
           await AsyncStorage.setItem("userId", response.data._id);
           await AsyncStorage.setItem("phoneNumber", response.data.phoneNumber);
+          await AsyncStorage.setItem("username", response.data.username);
+          await AsyncStorage.setItem("email", response.data.email);
           this.props.isVisibleHandler(false, true);
         })
         .catch(error => {

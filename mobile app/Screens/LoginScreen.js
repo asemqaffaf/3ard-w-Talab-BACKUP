@@ -65,6 +65,8 @@ export default class LoginScreen extends Component {
       .then(async response => {
         await AsyncStorage.setItem("userId", response.data.userId);
         await AsyncStorage.setItem("phoneNumber", response.data.phoneNumber);
+        await AsyncStorage.setItem("username", response.data.username);
+        await AsyncStorage.setItem("email", response.data.email);
         this.setState({
           isLoggedIn: true,
           getId: await AsyncStorage.getItem("userId")

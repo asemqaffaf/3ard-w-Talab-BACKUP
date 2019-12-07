@@ -18,7 +18,9 @@ export default class Profile extends Component {
     phoneNumber: null,
     posts: [],
     selectedPost: null,
-    isVisible: false
+    isVisible: false,
+    username : null,
+    email : null
   };
   componentDidMount() {
     this.fetchUsersPosts();
@@ -38,8 +40,10 @@ export default class Profile extends Component {
   getUserInfo = async () => {
     let userId = await AsyncStorage.getItem("userId");
     let phoneNumber = await AsyncStorage.getItem("phoneNumber");
+    let name = await AsyncStorage.getItem("username");
+    let email = await AsyncStorage.getItem("email");
 
-    this.setState({ userId, phoneNumber });
+    this.setState({ userId, phoneNumber, name, email });
   };
 
   postInfoHandler = (selectedPost, isVisible) => {
@@ -62,6 +66,8 @@ export default class Profile extends Component {
   logOut = async () => {
     await AsyncStorage.removeItem("userId");
     await AsyncStorage.removeItem("phoneNumber");
+    await AsyncStorage.removeItem("username");
+    await AsyncStorage.removeItem("email");
     this.props.navigation.navigate("landingStack");
   };
   // post._id
@@ -77,20 +83,24 @@ export default class Profile extends Component {
             isVisible={this.isVisible}
           ></ProfileModal>
         </Modal>
-        <View style={styles.header}></View>
-        <Image
-          style={styles.avatar}
-          source={{ uri: "https://bootdey.com/img/Content/avatar/avatar6.png" }}
-        />
-        <View style={styles.bodyContent}>
+
+
+        <View style={styles.header}>
+        <Text
+        style={styles.name}
+      >{`${this.state.name}`}</Text>
           <Text
             style={styles.name}
-          >{`Phone number ${this.state.phoneNumber}`}</Text>
-          <Text style={styles.info}> Web designer / Mobile developer</Text>
-          <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, saepe sapientem eu nam. Qui ne assum
-            electram expetendis, omittam deseruisse consequuntur ius an,
-          </Text>
+          >{`${this.state.phoneNumber}`}</Text>
+          <Text
+          style={styles.name}
+        >{`${this.state.email}`}</Text>
+        
+        </View>
+        
+        <View style={styles.bodyContent}>
+
+
 
           {this.state.posts.map((post, index) => {
             return (
@@ -110,13 +120,13 @@ export default class Profile extends Component {
                     >
                       <View>
                         <Image
-                          source={{
-                            uri: post.imgUrl
-                          }}
+
+                          // source={{uri: post.imgUrl}}
+                          source={{ uri: 'https://assets.fontsinuse.com/static/use-media-items/17/16215/full-1052x1052/56702c8b/js.png?resolution=0' }}
                           style={{
                             width: vw(20),
                             height: vh(9),
-                            borderRadius: 40,
+                            borderRadius: 10,
                             margin: vh(0.2)
                           }}
                         />
@@ -128,12 +138,18 @@ export default class Profile extends Component {
                           borderRadius: 10,
                           backgroundColor: "#2096F3",
                           fontWeight: "400",
-                          padding: 10,
-                          marginTop: vh(2)
+                          padding: 8,
+
                         }}
                       >
                         <Text style={{ fontSize: 20, color: "white" }}>
-                          {post.name}
+                          {`Name: ${post.name}`}
+                        </Text>
+                        <Text style={{ fontSize: 15, color: "lightgray" }}>
+                          {`Category: ${post.postCategories}`}
+                        </Text>
+                        <Text style={{ fontSize: 15, color: "lightgray" }}>
+                          {`Location ${post.location}`}
                         </Text>
                       </View>
                     </View>
@@ -163,7 +179,9 @@ export default class Profile extends Component {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "black",
-    height: 200
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   avatar: {
     width: 130,
@@ -185,11 +203,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     padding: 30,
-    marginTop: 40
+
   },
   name: {
     fontSize: 28,
-    color: "#696969",
+    color: "white",
     fontWeight: "600"
   },
   info: {
@@ -204,7 +222,7 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   buttonContainer: {
-    marginTop: 10,
+    marginTop: 20,
     height: 45,
     flexDirection: "row",
     justifyContent: "center",
@@ -215,7 +233,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#00BFFF"
   },
   deleteButtonContainer: {
-    marginTop: 10,
     height: 45,
     flexDirection: "row",
     justifyContent: "center",

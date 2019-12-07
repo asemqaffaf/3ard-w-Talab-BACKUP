@@ -3,9 +3,9 @@ import {
   View,
   Text,
   Image,
-  ScrollView,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  FlatList
 } from "react-native";
 import axios from "axios";
 import { vw, vh } from "react-native-expo-viewport-units";
@@ -16,7 +16,8 @@ export default class SellerScreen extends Component {
   state = {
     offers: [],
     post: null,
-    isVisible: false
+    isVisible: false,
+    refreshing: false
   };
   componentDidMount = () => {
     this.fetchSellerOffers();
@@ -79,86 +80,84 @@ export default class SellerScreen extends Component {
   isVisible = isVisible => this.setState({ isVisible });
   render() {
     return (
-      <>
-        <ScrollView>
-          <View style={{ margin: 10 }}>
-            <Modal isVisible={this.state.isVisible}>
-              <SellerModal
-                post={this.state.post}
-                acceptOfferHandler={this.acceptOfferHandler}
-                deniedOfferHandler={this.deniedOfferHandler}
-                isVisible={this.isVisible}
-              />
-            </Modal>
+      <View style={{ margin: 10, flex: 1 }}>
+        <Modal isVisible={this.state.isVisible}>
+          <SellerModal
+            post={this.state.post}
+            acceptOfferHandler={this.acceptOfferHandler}
+            deniedOfferHandler={this.deniedOfferHandler}
+            isVisible={this.isVisible}
+          />
+        </Modal>
 
-            {this.state.offers.map((item, index) => {
-              statusColor = "white";
-              if (item.status == "Rejected") {
-                statusColor = "tomato";
-              }
-              if (item.status[0] == "Accepted") {
-                statusColor = "#90ee90";
-              }
-              return (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => {
-                    this.detailsHandler(item, true);
+        <FlatList
+          keyExtractor={(offer, index) => index.toString()}
+          data={this.state.offers}
+          renderItem={offer => {
+            statusColor = "white";
+            if (offer.item.status == "Rejected") {
+              statusColor = "tomato";
+            }
+            if (offer.item.status[0] == "Accepted") {
+              statusColor = "#90ee90";
+            }
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  this.detailsHandler(offer.item, true);
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    alignItems: "flex-start",
+                    height: vh(10),
+                    marginTop: vh(2)
                   }}
                 >
+                  <Image
+                    source={{ uri: offer.item.imgUrl }}
+                    // source={{
+                    //   uri:
+                    //     "http://www.websalution.com/wp-content/uploads/2019/08/icon.javascript.png"
+                    // }}
+                    style={{
+                      width: vw(20),
+                      height: vh(8),
+                      borderRadius: 8,
+                      margin: vw(1)
+                    }}
+                  />
                   <View
                     style={{
-                      flexDirection: "row",
-                      flexWrap: "wrap",
-                      alignItems: "flex-start",
-                      height: vh(10),
-                      marginTop: vh(2)
+                      width: vw(70),
+                      borderRadius: 10,
+                      backgroundColor: "#2096F3",
+                      fontWeight: "400",
+                      padding: 10
                     }}
                   >
-                    <Image
-                      source={{ uri: item.imgUrl }}
-                      // source={{
-                      //   uri:
-                      //     "http://www.websalution.com/wp-content/uploads/2019/08/icon.javascript.png"
-                      // }}
-                      style={{
-                        width: vw(20),
-                        height: vh(8),
-                        borderRadius: 8,
-                        margin: vw(1)
-                      }}
-                    />
-                    <View
-                      style={{
-                        width: vw(70),
-                        borderRadius: 10,
-                        backgroundColor: "#2096F3",
-                        fontWeight: "400",
-                        padding: 10
-                      }}
-                    >
-                      <Text
-                        style={{ fontSize: 20, color: "white" }}
-                      >{`You've got an offer: ${item.price} JOD`}</Text>
-                      <Text style={{ fontSize: 15, color: "white" }}>
-                        {item.name}
-                      </Text>
-                      <Text style={{ fontSize: 15, color: `${statusColor}` }}>
-                        {Array.isArray(item.status)
-                          ? item.status[0]
-                          : item.status}
-                      </Text>
-                    </View>
+                    <Text
+                      style={{ fontSize: 20, color: "white" }}
+                    >{`You've got an offer: ${offer.item.price} JOD`}</Text>
+                    <Text style={{ fontSize: 15, color: "white" }}>
+                      {offer.item.name}
+                    </Text>
+                    <Text style={{ fontSize: 15, color: `${statusColor}` }}>
+                      {Array.isArray(offer.item.status)
+                        ? offer.item.status[0]
+                        : offer.item.status}
+                    </Text>
                   </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </ScrollView>
-      </>
+                </View>
+              </TouchableOpacity>
+            );
+          }}
+          refreshing={this.state.refreshing}
+          onRefresh={this.fetchSellerOffers}
+        />
+      </View>
     );
   }
 }
-
-// <TouchableOpacity><Text style={{ height: vh(4), backgroundColor: '#4280c8', fontWeight: '400', color: 'white', marginTop: vh(2) }}>Accept</Text></TouchableOpacity>
-// <TouchableOpacity><Text style={{ height: vh(4), backgroundColor: '#4280c8', fontWeight: '400', color: 'white', marginLeft: vw(1), marginTop: vh(2) }}>Decline</Text></TouchableOpacity>

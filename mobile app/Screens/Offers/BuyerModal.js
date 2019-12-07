@@ -12,8 +12,6 @@ import { vw, vh } from "react-native-expo-viewport-units";
 
 export default class BuyerModal extends Component {
   render() {
-    let dateFormat = this.props.post.date.split(" ");
-    console.log(this.props.post);
     return (
       <ScrollView>
         <View style={styles.container}>

@@ -7,7 +7,8 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  AsyncStorage
+  AsyncStorage,
+  FlatList
 } from "react-native";
 import { vw, vh } from "react-native-expo-viewport-units";
 import Modal from "react-native-modal";
@@ -19,8 +20,9 @@ export default class Profile extends Component {
     posts: [],
     selectedPost: null,
     isVisible: false,
-    username : null,
-    email : null
+    username: null,
+    email: null,
+    refreshing: false
   };
   componentDidMount() {
     this.fetchUsersPosts();
@@ -75,7 +77,7 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <View style={{ flex: 1 }}>
         <Modal isVisible={this.state.isVisible}>
           <ProfileModal
             selectedPost={this.state.selectedPost}
@@ -84,30 +86,38 @@ export default class Profile extends Component {
           ></ProfileModal>
         </Modal>
 
-
         <View style={styles.header}>
-        <Text
-        style={styles.name}
-      >{`${this.state.name}`}</Text>
-          <Text
-            style={styles.name}
-          >{`${this.state.phoneNumber}`}</Text>
-          <Text
-          style={styles.name}
-        >{`${this.state.email}`}</Text>
-        
+          <Text style={styles.name}>{`${this.state.name}`}</Text>
+          <Text style={styles.name}>{`${this.state.phoneNumber}`}</Text>
+          <Text style={styles.name}>{`${this.state.email}`}</Text>
+
+          <View
+            style={{ flexDirection: "row", justifyContent: "center" }}
+          >
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={this.logOut}
+            >
+              <Text style={{ color: "white" }}>Log Out</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.deleteButtonContainer}
+              onPress={this.fetchUsersPosts}
+            >
+              <Text style={{ color: "white" }}>DEACTIVATE</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        
-        <View style={styles.bodyContent}>
 
-
-
-          {this.state.posts.map((post, index) => {
+        <FlatList
+          keyExtractor={(post, index) => index.toString()}
+          data={this.state.posts}
+          renderItem={post => {
             return (
-              <View key={index}>
+              <View>
                 <TouchableOpacity
                   onPress={() => {
-                    this.postInfoHandler(post, true);
+                    this.postInfoHandler(post.item, true);
                   }}
                 >
                   <View>
@@ -120,9 +130,8 @@ export default class Profile extends Component {
                     >
                       <View>
                         <Image
-
-                          // source={{uri: post.imgUrl}}
-                          source={{ uri: 'https://assets.fontsinuse.com/static/use-media-items/17/16215/full-1052x1052/56702c8b/js.png?resolution=0' }}
+                          source={{ uri: post.imgUrl }}
+                          // source={{ uri: 'https://assets.fontsinuse.com/static/use-media-items/17/16215/full-1052x1052/56702c8b/js.png?resolution=0' }}
                           style={{
                             width: vw(20),
                             height: vh(9),
@@ -138,18 +147,17 @@ export default class Profile extends Component {
                           borderRadius: 10,
                           backgroundColor: "#2096F3",
                           fontWeight: "400",
-                          padding: 8,
-
+                          padding: 8
                         }}
                       >
                         <Text style={{ fontSize: 20, color: "white" }}>
-                          {`Name: ${post.name}`}
+                          {`Name: ${post.item.name}`}
                         </Text>
                         <Text style={{ fontSize: 15, color: "lightgray" }}>
-                          {`Category: ${post.postCategories}`}
+                          {`Category: ${post.item.postCategories}`}
                         </Text>
                         <Text style={{ fontSize: 15, color: "lightgray" }}>
-                          {`Location ${post.location}`}
+                          {`Location ${post.item.location}`}
                         </Text>
                       </View>
                     </View>
@@ -157,31 +165,22 @@ export default class Profile extends Component {
                 </TouchableOpacity>
               </View>
             );
-          })}
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={this.logOut}
-          >
-            <Text>Log Out</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.deleteButtonContainer}
-            onPress={this.fetchUsersPosts}
-          >
-            <Text style={{ color: "white" }}>DELETE ACCOUNT</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          }}
+          refreshing={this.state.refreshing}
+          onRefresh={this.fetchUsersPosts}
+        />
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   header: {
+    paddingTop: 30,
     backgroundColor: "black",
     height: 200,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   },
   avatar: {
     width: 130,
@@ -202,8 +201,7 @@ const styles = StyleSheet.create({
   bodyContent: {
     flex: 1,
     alignItems: "center",
-    padding: 30,
-
+    padding: 30
   },
   name: {
     fontSize: 28,
@@ -221,26 +219,30 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center"
   },
+
   buttonContainer: {
-    marginTop: 20,
+    marginBottom:10,
+    marginTop:10,
+    marginRight:10,
     height: 45,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
-    width: 250,
-    borderRadius: 30,
-    backgroundColor: "#00BFFF"
+    width: 150,
+    borderRadius: 10,
+    backgroundColor: "#2096F3"
   },
   deleteButtonContainer: {
+    marginBottom:10,
+    marginTop:10,
+    marginLeft:10,
     height: 45,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 20,
-    width: 250,
-    borderRadius: 30,
-    backgroundColor: "tomato"
+    width: 150,
+    borderRadius: 10,
+    backgroundColor: "red"
   }
 });
 

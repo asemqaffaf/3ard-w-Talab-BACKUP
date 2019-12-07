@@ -5,8 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
-  TextInput
+  Image
 } from "react-native";
 import { vw, vh } from "react-native-expo-viewport-units";
 
@@ -15,7 +14,12 @@ export default class SellerModal extends Component {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <View style={{ flexDirection: "row-reverse" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={{ fontSize: 27, marginLeft: 20, marginTop: 5 }}>
+              {this.props.post.name}
+            </Text>
             <TouchableOpacity
               style={styles.backButton}
               onPress={() => this.props.isVisible(false)}
@@ -24,25 +28,34 @@ export default class SellerModal extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.bodyContent}>
-            <Text style={{ fontSize: 27, marginBottom: 50 }}>
-              {this.props.post.name}
-            </Text>
             <Image
               source={{ uri: this.props.post.imgUrl }}
-              style={{ width: vw(80), height: vh(50) / 1.5 }}
+              style={{ width: vw(100), height: vh(40) / 1.5 }}
             />
             <View style={styles.textContainer}>
               <Text style={styles.textWrapper}>
-                <Text style={styles.text}>Post Name: </Text>
-                {this.props.post.name}
+                <Text style={styles.text}>Location: </Text>
+                {this.props.post.location}
               </Text>
               <Text style={styles.textWrapper}>
-                <Text style={styles.text}>Post Category: </Text>
+                <Text style={styles.text}>Category: </Text>
                 {this.props.post.postCategories}
               </Text>
               <Text style={styles.textWrapper}>
-                <Text style={styles.text}>Location: </Text>
-                {this.props.post.location}
+                <Text style={styles.text}>Info: </Text>
+                {this.props.post.additionalInfo}
+              </Text>
+              <View
+                style={{
+                  width: vw(80),
+                  borderTopColor: "black",
+                  borderTopWidth: 1,
+                  paddingTop: 10
+                }}
+              />
+              <Text style={styles.textWrapper}>
+                <Text style={styles.text}>Received Offer: </Text>
+                {this.props.post.price}JOD
               </Text>
               <Text style={styles.textWrapper}>
                 <Text style={styles.text}>Status: </Text>
@@ -60,11 +73,19 @@ export default class SellerModal extends Component {
                   alignItems: "center"
                 }}
               >
+                <View
+                  style={{
+                    width: vw(80),
+                    borderTopColor: "black",
+                    borderTopWidth: 1,
+                    paddingTop: 10
+                  }}
+                />
                 <TouchableOpacity
                   style={styles.buttonContainerDenied}
                   onPress={() => this.props.deniedOfferHandler(this.props.post)}
                 >
-                  <Text style={{ color: "white", fontSize: 20 }}>Denied</Text>
+                  <Text style={{ color: "white", fontSize: 20 }}>Reject</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.buttonContainerAccept}
@@ -74,7 +95,7 @@ export default class SellerModal extends Component {
                 </TouchableOpacity>
               </View>
             ) : (
-              <Text style={{ color: "red" }}>
+              <Text style={{ color: "red", marginVertical: 25 }}>
                 You've already responded to this Offer!{" "}
               </Text>
             )}
@@ -95,8 +116,7 @@ const styles = StyleSheet.create({
 
   bodyContent: {
     flex: 1,
-    alignItems: "center",
-    padding: 30
+    alignItems: "center"
   },
 
   backButton: {
@@ -150,13 +170,15 @@ const styles = StyleSheet.create({
   },
 
   textWrapper: {
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 15
   },
 
   textContainer: {
     flex: 1,
-    fontSize: 15,
-    marginTop: 50
+    marginTop: 20,
+    marginBottom: 10
   }
 });
 

@@ -102,6 +102,11 @@ export default class AddPost extends Component {
                 <Text style={styles.text}>Info: </Text>
                 {additionalInfo}
               </Text>
+              <View
+                style={{
+                  width: vw(80)
+                }}
+              />
             </View>
             {userId !== ownerSellerId ? (
               <View
@@ -208,11 +213,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     fontWeight: "bold"
-  },
-
-  line: {
-    borderBottomColor: "black",
-    borderBottomWidth: 1
   },
 
   textWrapper: {

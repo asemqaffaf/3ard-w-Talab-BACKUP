@@ -58,7 +58,6 @@ export default class BuyerScreen extends Component {
   isVisible = isVisible => this.setState({ isVisible });
 
   render() {
-    // this.fetchBuyerSellerOffers();
     return (
       <>
         <ScrollView>
@@ -120,8 +119,13 @@ export default class BuyerScreen extends Component {
                             </Text>
                             {Array.isArray(item.status) ? (
                               <Text
-                                style={{ fontSize: 15, color: "#90ee90" }}
-                              >{`${formatDate[4]}  ${item.status[0]}  ...`}</Text>
+                                style={{ fontSize: 15, color: "lightgray" }}
+                              >
+                                {`${formatDate[4]}`}
+                                <Text
+                                  style={{ color: "#90ee90" }}
+                                >{`  ${item.status[0]}`}</Text>
+                              </Text>
                             ) : (
                               <Text
                                 style={{ fontSize: 15, color: "lightgray" }}

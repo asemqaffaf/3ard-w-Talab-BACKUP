@@ -78,7 +78,6 @@ export default class SellerScreen extends Component {
   };
   isVisible = isVisible => this.setState({ isVisible });
   render() {
-    // this.fetchSellerOffers()
     return (
       <>
         <ScrollView>
@@ -117,11 +116,11 @@ export default class SellerScreen extends Component {
                     }}
                   >
                     <Image
-                      // source={{ uri: item.imgUrl }}
-                      source={{
-                        uri:
-                          "http://www.websalution.com/wp-content/uploads/2019/08/icon.javascript.png"
-                      }}
+                      source={{ uri: item.imgUrl }}
+                      // source={{
+                      //   uri:
+                      //     "http://www.websalution.com/wp-content/uploads/2019/08/icon.javascript.png"
+                      // }}
                       style={{
                         width: vw(20),
                         height: vh(8),

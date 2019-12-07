@@ -17,7 +17,12 @@ export default class BuyerModal extends Component {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <View style={{ flexDirection: "row-reverse" }}>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text style={{ fontSize: 27, marginLeft: 20, marginTop: 5 }}>
+              {this.props.post.name}
+            </Text>
             <TouchableOpacity
               style={styles.backButton}
               onPress={() => this.props.isVisible(false)}
@@ -25,46 +30,63 @@ export default class BuyerModal extends Component {
               <Text style={{ color: "#4280c8", fontWeight: "400" }}>Back</Text>
             </TouchableOpacity>
           </View>
-          <Text>{JSON.stringify(this.props.post)}</Text>
           <View style={styles.bodyContent}>
             {Array.isArray(this.props.post.status) ? (
               <View>
                 <Text
-                  style={{ fontSize: vw(5), marginBottom: 50, color: "green" }}
+                  style={{ fontSize: vw(5), margin: vh(3), color: "green",textAlign: 'center' }}
                 >
                   {"Congrats! your offer has been " +
                     this.props.post.status[0] +
-                    "!!"}
+                    "!"}
                 </Text>
-                <Text style={{ fontSize: vw(5), marginBottom: 50 }}>
-                  {"Please Contact me at this number " +
+                <Text style={{ fontSize: vw(5), textAlign: 'center', marginBottom: vh(3) }}>
+                  {"Please Contact me on this number " +
                     this.props.post.status[1]}
                 </Text>
               </View>
             ) : this.props.post.status === "Rejected" ? (
-              <Text style={{ fontSize: vw(5), marginBottom: 50, color: "red" }}>
-                {"Unfortunately your offer has been : " +
+              <Text style={{ fontSize: vw(5), margin: vh(3), color: "red", textAlign: 'center' }}>
+                {"Unfortunately your offer has been " +
                   this.props.post.status +
                   "!"}
               </Text>
             ) : (
-              <Text style={{ fontSize: vw(5), marginBottom: 50 }}>
-                {`Status: ${this.props.post.status}..`}
+              <Text style={{ fontSize: vw(5), margin: vh(3) }}>
+                Status: Pending... 
               </Text>
             )}
             <Image
               source={{
                 uri: this.props.post.imgUrl
               }}
-              style={{ width: vw(80), height: vh(50) / 1.5 }}
+              style={{ width: vw(100), height: vh(40) / 1.5 }}
             />
             <View style={styles.textContainer}>
-              <Text
-                style={{ fontSize: 24 }}
-              >{`Your Offer ${this.props.post.price}`}</Text>
-              <Text
-                style={{ fontSize: 14 }}
-              >{`Date: ${dateFormat[0]} ${dateFormat[1]} ${dateFormat[2]}`}</Text>
+              <Text style={styles.textWrapper}>
+                <Text style={styles.text}>Location: </Text>
+                {this.props.post.location}
+              </Text>
+              <Text style={styles.textWrapper}>
+                <Text style={styles.text}>Category: </Text>
+                {this.props.post.postCategories}
+              </Text>
+              <Text style={styles.textWrapper}>
+                <Text style={styles.text}>Info: </Text>
+                {this.props.post.additionalInfo}
+              </Text>
+              <View
+                style={{
+                  width: vw(80),
+                  borderTopColor: "black",
+                  borderTopWidth: 1,
+                  paddingTop: 10
+                }}
+              />
+              <Text style={styles.textWrapper}>
+                <Text style={styles.text}>Sent Offer: </Text>
+                {this.props.post.price}JOD
+              </Text>
             </View>
             <View
               style={{

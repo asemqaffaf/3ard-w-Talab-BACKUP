@@ -72,6 +72,17 @@ export default class Profile extends Component {
     await AsyncStorage.removeItem("email");
     this.props.navigation.navigate("landingStack");
   };
+  deactivateAccountHandler = async()=>{
+
+    axios.delete(`https://ardwtalabapp.herokuapp.com/posts/API/deleteUserPosts/${this.state.userId}`)
+    .then(res=>console.log(res.data))
+    .catch(err=>console.log(err))
+    .then( axios.delete(`https://ardwtalabapp.herokuapp.com/users/API/delete/${this.state.userId}`)
+      .then(res=>console.log(res))
+      .catch(err=>console.log(err))
+    )
+    .then(()=>this.logOut())
+  }
   // post._id
   isVisible = isVisible => this.setState({ isVisible });
 
@@ -92,18 +103,21 @@ export default class Profile extends Component {
           <Text style={styles.name}>{`${this.state.email}`}</Text>
 
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            {/* log out button */}
             <TouchableOpacity
               style={styles.buttonContainer}
-              onPress={this.logOut}
-            >
+              onPress={this.logOut}>
               <Text style={{ color: "white" }}>Log Out</Text>
             </TouchableOpacity>
+           {/* log out button */}
+
+            {/* deactivate account button */}
             <TouchableOpacity
               style={styles.deleteButtonContainer}
-              onPress={this.fetchUsersPosts}
-            >
+              onPress={this.deactivateAccountHandler}>
               <Text style={{ color: "white" }}>DEACTIVATE</Text>
             </TouchableOpacity>
+            {/* deactivate account button */}
           </View>
         </View>
 

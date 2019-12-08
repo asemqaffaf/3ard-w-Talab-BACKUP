@@ -43,3 +43,4 @@
 #     "phoneNumber" : "0788000288" 
 # }
 # DELETE http://192.168.86.33:9002/users/API/delete/5dd01115afc48440677b7285
+# DELETE http://localhost:5000/posts/API/deleteUserPosts/5dd03af4694cc74c0fbe210d to delete all posts and offers to spacific user 

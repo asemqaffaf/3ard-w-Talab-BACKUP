@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "3ard w talab 2",
-    "slug": "3ard-w-talab2",
+    "name": "3ard w talab ",
+    "slug": "3ard-w-talab",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
@@ -25,6 +25,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": ""
   }
 }

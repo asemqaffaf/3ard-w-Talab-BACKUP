@@ -134,6 +134,7 @@ export default class AddPost extends Component {
                 <TextInput
                   style={styles.input}
                   placeholder="  Make an Offer"
+                  placeholderTextColor='darkgrey'
                   blurOnSubmit
                   autoCapitalize="none"
                   autoCorrect={false}

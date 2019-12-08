@@ -5,8 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
-  TextInput
+  Image
 } from "react-native";
 import { vw, vh } from "react-native-expo-viewport-units";
 

@@ -61,21 +61,25 @@ export default class AddPost extends Component {
             <TextInput
               style={styles.input}
               placeholder="  Post Title"
+              placeholderTextColor='darkgrey'
               onChangeText={event => this.postData(event, "name")}
             ></TextInput>
             <TextInput
               style={styles.input}
               placeholder="  Category"
+              placeholderTextColor='darkgrey'
               onChangeText={event => this.postData(event, "postCategories")}
             ></TextInput>
             <TextInput
               style={styles.input}
               placeholder="  Location"
+              placeholderTextColor='darkgrey'
               onChangeText={event => this.postData(event, "location")}
             ></TextInput>
             <TextInput
               style={styles.input}
               placeholder="  Additional Info"
+              placeholderTextColor='darkgrey'
               onChangeText={event => this.postData(event, "additionalInfo")}
             ></TextInput>
             <TouchableOpacity

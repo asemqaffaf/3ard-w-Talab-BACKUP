@@ -106,12 +106,14 @@ export default class LoginScreen extends Component {
             <TextInput
               style={styles.input}
               placeholder="  Email Address"
+              placeholderTextColor='darkgrey'
               textContentType="emailAddress"
               onChangeText={event => this.AuthHandler(event, "email")}
             ></TextInput>
             <TextInput
               style={styles.input}
               placeholder="  Password"
+              placeholderTextColor='darkgrey'
               textContentType="password"
               secureTextEntry={true}
               onChangeText={event => this.AuthHandler(event, "password")}

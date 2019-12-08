@@ -103,18 +103,21 @@ export default class SignUp extends Component {
             <TextInput
               style={styles.input}
               placeholder="  Full name"
+              placeholderTextColor='darkgrey'
               textContentType="name"
               onChangeText={event => this.signUpHandler(event, "name")}
             ></TextInput>
             <TextInput
               style={styles.input}
               placeholder="  Email Address"
+              placeholderTextColor='darkgrey'
               textContentType="emailAddress"
               onChangeText={event => this.signUpHandler(event, "email")}
             ></TextInput>
             <TextInput
               style={styles.input}
               placeholder="  Password"
+              placeholderTextColor='darkgrey'
               textContentType="password"
               secureTextEntry={true}
               onChangeText={event => this.signUpHandler(event, "password")}
@@ -122,6 +125,7 @@ export default class SignUp extends Component {
             <TextInput
               style={styles.input}
               placeholder="  Phone number"
+              placeholderTextColor='darkgrey'
               textContentType="telephoneNumber"
               keyboardType="number-pad"
               onChangeText={event => this.signUpHandler(event, "phoneNumber")}

@@ -77,7 +77,7 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Modal isVisible={this.state.isVisible}>
           <ProfileModal
             selectedPost={this.state.selectedPost}
@@ -91,9 +91,7 @@ export default class Profile extends Component {
           <Text style={styles.name}>{`${this.state.phoneNumber}`}</Text>
           <Text style={styles.name}>{`${this.state.email}`}</Text>
 
-          <View
-            style={{ flexDirection: "row", justifyContent: "center" }}
-          >
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <TouchableOpacity
               style={styles.buttonContainer}
               onPress={this.logOut}
@@ -114,7 +112,7 @@ export default class Profile extends Component {
           data={this.state.posts}
           renderItem={post => {
             return (
-              <View>
+              <View style={{ marginTop: 10 }}>
                 <TouchableOpacity
                   onPress={() => {
                     this.postInfoHandler(post.item, true);
@@ -130,24 +128,23 @@ export default class Profile extends Component {
                     >
                       <View>
                         <Image
-                          source={{ uri: post.imgUrl }}
+                          source={{ uri: post.item.imgUrl }}
                           // source={{ uri: 'https://assets.fontsinuse.com/static/use-media-items/17/16215/full-1052x1052/56702c8b/js.png?resolution=0' }}
                           style={{
                             width: vw(20),
-                            height: vh(9),
-                            borderRadius: 10,
-                            margin: vh(0.2)
+                            height: vh(8),
+                            borderRadius: 8,
+                            margin: vw(1)
                           }}
                         />
                       </View>
                       <View
                         style={{
-                          margin: vw(1),
-                          width: vw(60),
-                          borderRadius: 10,
+                          width: vw(70),
+                          borderRadius: 8,
                           backgroundColor: "#2096F3",
                           fontWeight: "400",
-                          padding: 8
+                          padding: 10
                         }}
                       >
                         <Text style={{ fontSize: 20, color: "white" }}>
@@ -157,7 +154,7 @@ export default class Profile extends Component {
                           {`Category: ${post.item.postCategories}`}
                         </Text>
                         <Text style={{ fontSize: 15, color: "lightgray" }}>
-                          {`Location ${post.item.location}`}
+                          {`Location: ${post.item.location}`}
                         </Text>
                       </View>
                     </View>
@@ -176,8 +173,10 @@ export default class Profile extends Component {
 
 const styles = StyleSheet.create({
   header: {
+    marginBottom: 10,
     paddingTop: 30,
     backgroundColor: "black",
+    width: "100%",
     height: 200,
     justifyContent: "center",
     alignItems: "center"
@@ -221,9 +220,9 @@ const styles = StyleSheet.create({
   },
 
   buttonContainer: {
-    marginBottom:10,
-    marginTop:10,
-    marginRight:10,
+    marginBottom: 10,
+    marginTop: 10,
+    marginRight: 10,
     height: 45,
     flexDirection: "row",
     justifyContent: "center",
@@ -233,9 +232,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#2096F3"
   },
   deleteButtonContainer: {
-    marginBottom:10,
-    marginTop:10,
-    marginLeft:10,
+    marginBottom: 10,
+    marginTop: 10,
+    marginLeft: 10,
     height: 45,
     flexDirection: "row",
     justifyContent: "center",

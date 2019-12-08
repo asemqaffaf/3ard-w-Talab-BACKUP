@@ -101,7 +101,7 @@ async function sellerOffers(sellerID) {
                 if (post._doc.sellerID === sellerID) {
                     Object.keys(post._doc).map(key => {
                         if (post._doc[key].price != null) {
-                            arr.push({ imgUrl: post._doc.imgUrl, price: post._doc[key].price,status: post._doc[key].status , name: post._doc.name, postCategories: post._doc.postCategories, location: post._doc.location, key, offerMaker: key, postId: post._doc[key].id , additionalInfo : post._doc.additionalInfo })
+                            arr.push({ imgUrl: post._doc.imgUrl, price: post._doc[key].price, status: post._doc[key].status, name: post._doc.name, postCategories: post._doc.postCategories, location: post._doc.location, key, offerMaker: key, postId: post._doc[key].id, additionalInfo: post._doc.additionalInfo })
                         }
                     })
                 }
@@ -115,17 +115,17 @@ async function sellerOffers(sellerID) {
     return arr
 }
 async function buyerOffers(buyerName) {
-    let arr = [] 
+    let arr = []
     let data = postsData.find()
     await data.then((DATA) => {
         DATA.map(post => {
             if (post._doc[buyerName] != null) {
                 let newObj = post._doc[buyerName]
                 newObj['imgUrl'] = post._doc.imgUrl
-                newObj['id']  = post._doc._id
+                newObj['id'] = post._doc._id
                 newObj['name'] = post._doc.name
-                newObj['postCategories']  = post._doc.postCategories
-                newObj['location'] =  post._doc.location
+                newObj['postCategories'] = post._doc.postCategories
+                newObj['location'] = post._doc.location
                 newObj['additionalInfo'] = post._doc.additionalInfo
                 arr.push(newObj)
             }
@@ -284,33 +284,47 @@ router.put('/deleteOffer/', async (request, response) => {
     }
 })
 /*<=========================== END. DELETE a Post  func.===========================>*/
-router.get('/getUserPosts',async (request, response)=>{
-    try{
+router.get('/getUserPosts', async (request, response) => {
+    try {
         let data = await postsData.find(request.query)
         response.json(data)
     }
     catch{
-        response.status(500).json({err: err.message})
+        response.status(500).json({ err: err.message })
     }
-   })
-   router.delete('/deletePost/:id', async(request,response)=>{
-       try{
-        await postsData.findByIdAndDelete(request.params.id,(err,doc)=>{
-            if(err){
+})
+router.delete('/deletePost/:id', async (request, response) => {
+    try {
+        await postsData.findByIdAndDelete(request.params.id, (err, doc) => {
+            if (err) {
                 response.status(404).json(err)
-            }else{
+            } else {
                 response.status(200).json(doc)
             }
-       })
-    }   catch{
+        })
+    } catch{
         response.status(500).json(err)
     }
-   })
-   router.delete('/deleteUserPosts',async(request,response)=>{
-       await postsData.remove({test:0},(err,doc)=>{
-        response.json(doc)
-       })
-   })
+})
+router.delete('/deleteUserPosts/:id', async (request, response) => {
+    try {
+        await postsData.deleteMany({ sellerID: `${request.params.id}` }, (err, doc) => {
+            if (err) { response.status(204).json({ err: err.message }) }
+            // else { response.status(201).json(doc) }
+        })
+    }  catch (err) {
+        // response.status(500).json({ message: err.message })
+    }try{
+        await postsData.updateMany({}, { $unset: { [request.params.id]: {} } }, (err, doc) => {
+            if (err) {response.status(400).json({ message: err.message })}
+            else{response.status(201).json(doc.nModified)}
+        })
+    }
+    catch (err) {
+        response.status(500).json({ message: err.message })
+    }
+
+})
 module.exports = router
 
 

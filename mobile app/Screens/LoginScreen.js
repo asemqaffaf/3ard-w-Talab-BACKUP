@@ -77,7 +77,7 @@ export default class LoginScreen extends Component {
         this.setState({
           isLoggedIn: false
         });
-        alert(err.message);
+        alert('Invalid email or password!');
       });
   };
 

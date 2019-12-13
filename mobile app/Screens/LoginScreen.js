@@ -7,7 +7,8 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  AsyncStorage
+  AsyncStorage,
+  YellowBox
 } from "react-native";
 import Modal from "react-native-modal";
 import SignUp from "./SignUpScreen";
@@ -24,8 +25,8 @@ export default class LoginScreen extends Component {
     isVisible: false
   };
    componentDidMount() {
-     this.load()
-    // let getter = await AsyncStorage.getItem("userId");
+    this.load()
+    YellowBox.ignoreWarnings(["Warning: Can't perform a React state update on an unmounted component"])
 
   }
   load = async ()=>{

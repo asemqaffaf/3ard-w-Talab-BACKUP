@@ -15,13 +15,20 @@ import axios from "axios";
 import { vw, vh } from "react-native-expo-viewport-units";
 
 export default class LoginScreen extends Component {
+
+
   state = {
     isLoggedIn: false,
     email: "",
     password: "",
     isVisible: false
   };
-  async componentDidMount() {
+   componentDidMount() {
+     this.load()
+    // let getter = await AsyncStorage.getItem("userId");
+
+  }
+  load = async ()=>{
     let getter = await AsyncStorage.getItem("userId");
     if (getter !== null) {
       this.setState({
@@ -33,8 +40,8 @@ export default class LoginScreen extends Component {
         isLoggedIn: false
       });
     }
-  }
 
+  }
   AuthHandler = (event, name) => {
     const regexEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
     const regexPassword = /^[0-9a-zA-Z]{8,}$/;
@@ -81,10 +88,10 @@ export default class LoginScreen extends Component {
       });
   };
 
-  isModalVisibleHandler = (isVisible, isLoggedIn) => {
-    this.setState({
-      isVisible: isVisible,
-      isLoggedIn: isLoggedIn
+  isModalVisibleHandler = async  (isVisible, isLoggedIn) => {
+     this.setState({
+      isVisible,
+      isLoggedIn
     });
     if (isLoggedIn) {
       this.props.navigation.navigate("tabNavigator");
@@ -139,7 +146,7 @@ export default class LoginScreen extends Component {
             </View>
             <TouchableOpacity
               style={styles.buttonContainerTwo}
-              onPress={() => this.setState({ isVisible: true })}
+              onPress={() => this.isModalVisibleHandler(true)}
             >
               <Text style={{ color: "#4280c8", fontWeight: "bold" }}>
                 Register

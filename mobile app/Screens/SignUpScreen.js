@@ -16,13 +16,17 @@ export default class SignUp extends Component {
     name: "",
     email: "",
     password: "",
-    phoneNumber: ""
+    phoneNumber: "",
+    resID : null,
+    resEmail : null,
+    resPhoneNumber : null,
+    resName : null,
   };
   signUpHandler = (event, name) => {
     const regexEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
     const regexPassword = /^[0-9a-zA-Z]{8,}$/;
     const regexName = /^[a-zA-Z]{3,}$/;
-    const regexPhone = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    const regexPhone = /^[0-9]{10,}$/;
     if (name === "name") {
       this.state.name = event;
       if (regexName.test(event)) {
@@ -68,16 +72,28 @@ export default class SignUp extends Component {
           password: this.state.password,
           phoneNumber: this.state.phoneNumber
         })
-        .then(async response => {
-          await AsyncStorage.setItem("userId", response.data._id);
-          await AsyncStorage.setItem("phoneNumber", response.data.phoneNumber);
-          await AsyncStorage.setItem("username", response.data.username);
-          await AsyncStorage.setItem("email", response.data.email);
-          this.props.isVisibleHandler(false, true);
+        .then( response => {
+          this.setState({
+            resID : response.data._id,
+            resEmail : response.data.email,
+            resPhoneNumber : response.data.phoneNumber,
+            resName : response.data.name,
+          })
+          // await AsyncStorage.setItem("userId", response.data._id);
+          // await AsyncStorage.setItem("phoneNumber", response.data.phoneNumber);
+          // await AsyncStorage.setItem("username", response.data.name);
+          // await AsyncStorage.setItem("email", response.data.email);
         })
         .catch(error => {
           alert(error.message);
-        });
+        })
+        .then(async ()=>{
+          await AsyncStorage.setItem("userId", this.state.resID);
+          await AsyncStorage.setItem("phoneNumber", this.state.resPhoneNumber);
+          await AsyncStorage.setItem("username", this.state.resName);
+          await AsyncStorage.setItem("email", this.state.resEmail);
+          this.props.isVisibleHandler(false, true);
+        })
     }
   };
   render() {

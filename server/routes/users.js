@@ -67,7 +67,7 @@ router.post('/new', async (request, response) => {
             response.status(201).json(newUser)
         }
         catch (error) {
-            response.status(400).json({ message: error.message })
+            response.status(204).json({ message: error.message })
             // response.status(400).json({  message : 'please use forget my password',rejection : 'email is already exist'   })
         }
     }
